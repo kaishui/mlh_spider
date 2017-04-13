@@ -6,7 +6,7 @@ import scrapy as scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
-from py_mlh_scrapy.items import listItem
+from py_mlh_scrapy.items import ListItem
 
 
 class archdailyProjectListSpider(scrapy.Spider):
@@ -28,7 +28,7 @@ class archdailyProjectListSpider(scrapy.Spider):
     def parse(self, response):
         # projects = response.xpath('//*[@class="afd-search-list__item"]')
         # self.logger.info("projects list: %s", projects.extract_first())
-        item = listItem()
+        item = ListItem()
         item['url'] = response.xpath('//div[@id="search-results"]/div/ul/li/a[@class="afd-search-list__link"]/@href').extract()
         item['title'] = response.xpath('//div[@id="search-results"]/div/ul/li/a/h2/text()').extract()
 
@@ -36,7 +36,7 @@ class archdailyProjectListSpider(scrapy.Spider):
         yield item
 
 
-process = CrawlerProcess(get_project_settings())
-
-process.crawl(archdailyProjectListSpider)
-process.start()
+# process = CrawlerProcess(get_project_settings())
+#
+# process.crawl(archdailyProjectListSpider)
+# process.start()

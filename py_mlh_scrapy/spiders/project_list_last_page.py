@@ -4,7 +4,7 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
-from py_mlh_scrapy.items import listItem
+from py_mlh_scrapy.items import ListItem
 
 
 class archdailySpider(scrapy.Spider):
@@ -32,7 +32,7 @@ class archdailySpider(scrapy.Spider):
 
     # 提取每个项目的 title & uri
     def parse_page(self, response):
-        item = listItem()
+        item = ListItem()
         item['url'] = response.xpath(
             '//div[@id="search-results"]/div/ul/li/a[@class="afd-search-list__link"]/@href').extract()
         item['title'] = response.xpath('//div[@id="search-results"]/div/ul/li/a/h2/text()').extract()
@@ -41,7 +41,7 @@ class archdailySpider(scrapy.Spider):
         yield item
 
 
-process = CrawlerProcess(get_project_settings())
-
-process.crawl(archdailySpider)
-process.start()
+# process = CrawlerProcess(get_project_settings())
+#
+# process.crawl(archdailySpider)
+# process.start()

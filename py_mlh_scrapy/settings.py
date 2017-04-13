@@ -11,7 +11,7 @@
 
 BOT_NAME = 'py_mlh_scrapy'
 
-SPIDER_MODULES = ['py_mlh_scrapy.spiders', 'py_mlh_scrapy']
+SPIDER_MODULES = ['py_mlh_scrapy.spiders']
 NEWSPIDER_MODULE = 'py_mlh_scrapy.spiders'
 
 
@@ -64,9 +64,11 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'py_mlh_scrapy.pipelines.PyMlhScrapyPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   # 'py_mlh_scrapy.pipelines.PyMlhScrapyPipeline': 300,
+    'py_mlh_scrapy.pipelines_dept.MongodbDeptPipeline': 1
+
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
