@@ -11,7 +11,7 @@
 
 BOT_NAME = 'py_mlh_scrapy'
 
-SPIDER_MODULES = ['py_mlh_scrapy.spiders']
+SPIDER_MODULES = ['py_mlh_scrapy.spiders', 'py_mlh_scrapy']
 NEWSPIDER_MODULE = 'py_mlh_scrapy.spiders'
 
 
@@ -88,3 +88,7 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+# MONGODB CONFIG
+# MONGODB DATABASE
+MONGODB_DATABASE = "mlh_dev"
+MONGODB_URI = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_dev"
