@@ -32,7 +32,7 @@ class scrapy_archdaily_detail(scrapy.Spider):
 
         base_url = 'http://www.archdaily.cn/cn/search/projects?page='
         # for page in range(1, num_pages + 1):
-        for page in range(1, 3):
+        for page in range(1, 2):
             logging.debug("page num: %s", page)
             # 遍历每一页查找所有项目的url
             yield scrapy.Request(base_url + str(page), dont_filter=True,
