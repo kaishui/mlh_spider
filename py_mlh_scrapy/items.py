@@ -11,8 +11,9 @@ from scrapy import Field
 class ListItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    title = Field()
-    url = Field()
+    title = Field()                         #tile
+    url = Field()                           #urls
+    site = Field(serializer=str)            #站点
 
 
 class DetailItem(scrapy.Item):
@@ -35,7 +36,9 @@ class Demension(scrapy.Item):
     text = Field(serializer=str)         # 值
 
 # 图片信息
-class ImgeItem(scrapy.Item):
+class ImageItem(scrapy.Item):
     orgin = Field(serializer=str)       # 来源
     target = Field(serializer=str)      # 阿里云oss image url
     copyright = Field(serializer=str)   # 版权信息
+    op = Field(serializer=str)          # 操作
+

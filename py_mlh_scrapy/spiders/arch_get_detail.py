@@ -4,7 +4,8 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
-from py_mlh_scrapy.items import DetailItem, Demension
+from py_mlh_scrapy.helper.mongo_util import MongoSupport
+from py_mlh_scrapy.items import DetailItem, Demension, ImageItem
 
 """
     class name represent the collection name in mongodb
@@ -12,39 +13,25 @@ from py_mlh_scrapy.items import DetailItem, Demension
 """
 
 
-class scrapy_archdaily_detail(scrapy.Spider):
+class scrapy_detail(scrapy.Spider):
     name = "archdeptspider"
-    start_urls = [
-        "http://www.archdaily.cn/cn/search/projects"
-    ]
 
     # 用户自定义setting 参考settings
     custom_settings = {
         "ITEM_PIPELINES": {
-            'py_mlh_scrapy.pipelines_dept.MongodbDeptPipeline': 1
+            'py_mlh_scrapy.pipelines_detail.PipelineDetail': 1
         }
     }
 
-    # 列表页面
-    def parse(self, response):
-        # follow pagination 获取最后一页
-        num_pages = int(response.xpath('//*[@id="pagination_container"]/div/div/a[6]/@href').re(r'(\d+)')[0])
-
-        base_url = 'http://www.archdaily.cn/cn/search/projects?page='
-        # for page in range(1, num_pages + 1):
-        for page in range(1, 2):
-            logging.debug("page num: %s", page)
-            # 遍历每一页查找所有项目的url
-            yield scrapy.Request(base_url + str(page), dont_filter=True,
-                                 callback=self.parse_page)
-
-    # 提取每个项目的uri
-    def parse_page(self, response):
-        for uri in response.xpath(
-                '//div[@id="search-results"]/div/ul/li/a[@class="afd-search-list__link"]/@href').extract():
-            uri = response.urljoin(uri)
-            # 爬取详情页面
-            yield scrapy.Request(url=uri, callback=self.parse_detail)
+    # 从mongodb 获取需要爬取的url
+    def start_requests(self):
+        mongoclient = MongoSupport()
+        collection = mongoclient.db["scrapy_urls"]
+        urls = collection.find({}, projection={"uri": 1, "_id": 0}, limit=2)
+        baseUrl = "http://www.archdaily.cn"
+        for uri in urls:
+            print("uri : %s", uri["uri"])
+            yield scrapy.Request(url=baseUrl +  uri["uri"], callback=self.parse_detail)
 
     # 详情页面
     def parse_detail(self, response):
@@ -63,10 +50,25 @@ class scrapy_archdaily_detail(scrapy.Spider):
         detail['tags'] = response.xpath('//div[@class="single-tags-cats__module clearfix"]/a/text()').extract()
         # 获取位置信息
         self.getLocations(detail, response)
-
+        # 获取图片
+        self.getImgs(detail, response)
 
         yield detail
 
+    # 获取图片
+    def getImgs(self, detail, response):
+        imgsLis = response.xpath('//ul[@id="gallery-thumbs"]/li')
+        imgs = []
+        for imgLi in imgsLis:
+            img = ImageItem()
+            # 版权信息
+            img["copyright"] = imgLi.xpath('./span/text()').extract_first().strip()
+            # 图片uri
+            img["orgin"] = imgLi.xpath('./a/@href').extract_first().strip()
+            # 操作
+            img["op"] = "act"
+            imgs.append(dict(img))
+        detail['orginImgs'] = imgs
 
     # 获取位置信息
     def getLocations(self, detail, response):
@@ -79,7 +81,6 @@ class scrapy_archdaily_detail(scrapy.Spider):
             address = dict({"latitude": latitude, "longitude": longitude})
             # 位置
             detail['location'] = address
-
 
     # 获取维度
     def getDemensions(self, response):
@@ -98,8 +99,8 @@ class scrapy_archdaily_detail(scrapy.Spider):
             demensions.append(dict(demension))
         return demensions
 
-#
+
 # process = CrawlerProcess(get_project_settings())
 #
-# process.crawl(scrapy_archdaily_detail)
+# process.crawl(scrapy_detail)
 # process.start()

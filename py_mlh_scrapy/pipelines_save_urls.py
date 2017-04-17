@@ -7,38 +7,40 @@
 
 import logging
 
-import pymongo
+from bson import ObjectId
 
-class MongodbFirstPipeline(object):
-    collection_name = 'scrapy-project-urls'
+from py_mlh_scrapy.helper.mongo_util import MongoSupport
 
-    def __init__(self, mongo_uri, mongo_db):
-        self.mongo_uri = mongo_uri
-        self.mongo_db = mongo_db
+
+class UrlsPipeline(object):
+    def __init__(self, mongoclient):
+        self.mongoclient = mongoclient
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            mongo_uri=crawler.settings.get('MONGODB_URI'),
-            mongo_db=crawler.settings.get('MONGODB_DATABASE')
+            mongoclient=MongoSupport()
         )
 
     def open_spider(self, spider):
-        self.client = pymongo.MongoClient(self.mongo_uri)
-        self.db = self.client[self.mongo_db]
+        logging.debug("open_spider....")
 
     def close_spider(self, spider):
-        self.client.close()
+        logging.debug("close_spider....")
 
+    # 存储 urls 列表页提取的uri
     def process_item(self, item, spider):
         logging.debug("spider name: %s", spider.name)
+        collectionName = spider.__class__.__name__
+        logging.debug("spider name: %s -- %s", spider.name, collectionName)
         if item is not None:
+            # 每一页的列表uri
             projectList = []
             for index in range(len(item["url"])):
                 url = item['url'][index]
                 title = item['title'][index]
                 logging.debug("item uri: %s -- %s", url, title)
-                project = {"uri" : url, "title" : title}
+                project = {"uri": url, "title": title, "site": item["site"], "op": "ACT", "_id": str(ObjectId())}
                 projectList.append(project)
-            self.db[self.collection_name].insert_many(projectList)
+            self.db[collectionName].insert_many(projectList)
         return item

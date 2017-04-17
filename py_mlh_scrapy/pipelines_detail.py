@@ -7,12 +7,10 @@
 
 import logging
 
-from bson.objectid import ObjectId
-
-from py_mlh_scrapy.helper.mongoclient import MongoClient
+from py_mlh_scrapy.helper.mongo_util import MongoSupport
 
 
-class MongodbDeptPipeline(object):
+class PipelineDetail(object):
 
     def __init__(self, mongoclient):
         self.mongoclient = mongoclient
@@ -20,7 +18,7 @@ class MongodbDeptPipeline(object):
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            mongoclient= MongoClient()
+            mongoclient= MongoSupport()
         )
 
     def open_spider(self, spider):
@@ -29,10 +27,14 @@ class MongodbDeptPipeline(object):
     def close_spider(self, spider):
         logging.debug("close_spider....")
 
+    # save 详情页面元素
     def process_item(self, item, spider):
+        # 方法名是collection name
         collectionName = spider.__class__.__name__
         logging.debug("spider name: %s -- %s", spider.name, collectionName)
-        id = self.mongoclient.db[collectionName].insert(dict(item))
+        detail = dict(item)
+        detail["_id"] = self.mongoclient.get_mongo_id()
+        # 插入db
+        id = self.mongoclient.db[collectionName].insert(detail)
         logging.debug("id type :", id)
-        project = self.mongoclient.db[collectionName].find_one({"_id", str(id)})
         return item
