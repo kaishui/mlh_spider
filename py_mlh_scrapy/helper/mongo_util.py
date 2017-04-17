@@ -1,10 +1,3 @@
-# coding=utf8
-'''
-Created on 2017年3月31日
-
-@author: lenovo
-'''
-
 import logging
 import pprint
 
