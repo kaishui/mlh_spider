@@ -94,3 +94,6 @@ ITEM_PIPELINES = {
 # MONGODB DATABASE
 MONGODB_DATABASE = "mlh_dev"
 MONGODB_URI = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_dev"
+
+# 图片保存在本地的地址
+IMAGES_STORE = '/data/scrapy_download_photo'

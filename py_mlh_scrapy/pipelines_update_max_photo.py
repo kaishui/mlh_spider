@@ -7,12 +7,10 @@
 
 import logging
 
-from bson import ObjectId
-
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
 
 
-class UrlsPipeline(object):
+class UpdateMaxPhotoPipeline(object):
     def __init__(self, mongoclient):
         self.mongoclient = mongoclient
 
@@ -28,20 +26,14 @@ class UrlsPipeline(object):
     def close_spider(self, spider):
         logging.debug("close_spider....")
 
-    # 存储 urls 列表页提取的uri
+    # 更新最大图片信息
     def process_item(self, item, spider):
         logging.debug("spider name: %s", spider.name)
-        collectionName = spider.__class__.__name__
+        collectionName = "scrapy_detail"
         logging.debug("spider name: %s -- %s", spider.name, collectionName)
-        if item is not None:
-            # 每一页的列表uri
-            projectList = []
-            for index in range(len(item["url"])):
-                url = item['url'][index]
-                title = item['title'][index]
-                id = str(ObjectId())
-                logging.debug("item uri: %s -- %s", url, title)
-                project = {"uri": url, "title": title, "site": item["site"], "op": "ACT", "_id": id}
-                projectList.append(project)
-            self.mongoclient.db[collectionName].insert_many(projectList)
+        # 查询条件
+        query = {"orginImgs.orgin": item['origin']}
+        # 更新最大图片
+        update = {"$set" : {"orginImgs.$.target" : item['target']}}
+        self.mongoclient.db[collectionName].update(query, update, multi=True)
         return item

@@ -37,8 +37,10 @@ class Demension(scrapy.Item):
 
 # 图片信息
 class ImageItem(scrapy.Item):
-    orgin = Field(serializer=str)       # 来源
-    target = Field(serializer=str)      # 阿里云oss image url
-    copyright = Field(serializer=str)   # 版权信息
-    op = Field(serializer=str)          # 操作
+    origin = Field(serializer=str)          # 查看大图页面
+    target = Field(serializer=str)          # 原图 image url
+    ossImgUrl = Field(serializer=str)       # aliyun oss url
+    localImgUrl = Field(serializer=str)     # 本地图片url
+    copyright = Field(serializer=str)       # 版权信息
+    op = Field(serializer=str)              # 操作
 

@@ -1,8 +1,6 @@
 import logging
 
 import scrapy
-from scrapy.crawler import CrawlerProcess
-from scrapy.utils.project import get_project_settings
 
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
 from py_mlh_scrapy.items import DetailItem, Demension, ImageItem
@@ -27,7 +25,7 @@ class scrapy_detail(scrapy.Spider):
     def start_requests(self):
         mongoclient = MongoSupport()
         collection = mongoclient.db["scrapy_urls"]
-        urls = collection.find({}, projection={"uri": 1, "_id": 0}, limit=2)
+        urls = collection.find({}, projection={"uri": 1, "_id": 0})
         baseUrl = "http://www.archdaily.cn"
         for uri in urls:
             print("uri : %s", uri["uri"])
@@ -98,9 +96,3 @@ class scrapy_detail(scrapy.Spider):
             demension["text"] = text
             demensions.append(dict(demension))
         return demensions
-
-
-# process = CrawlerProcess(get_project_settings())
-#
-# process.crawl(scrapy_detail)
-# process.start()
