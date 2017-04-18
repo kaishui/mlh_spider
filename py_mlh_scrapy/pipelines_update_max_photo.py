@@ -34,6 +34,10 @@ class UpdateMaxPhotoPipeline(object):
         # 查询条件
         query = {"orginImgs.orgin": item['origin']}
         # 更新最大图片
-        update = {"$set" : {"orginImgs.$.target" : item['target']}}
+        update = {"$set" : {
+            "orginImgs.$.target" : item['target'],
+            "orginImgs.$.ossImgUrl" : item['ossImgUrl'],
+            "orginImgs.$.localImgUrl" : item['localImgUrl']
+        }}
         self.mongoclient.db[collectionName].update(query, update, multi=True)
         return item

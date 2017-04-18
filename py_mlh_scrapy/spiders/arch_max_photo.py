@@ -17,7 +17,7 @@ class scrapy_max_photo(scrapy.Spider):
     custom_settings = {
         "ITEM_PIPELINES": {
             'py_mlh_scrapy.pipelines_update_max_photo.UpdateMaxPhotoPipeline': 300,
-            'py_mlh_scrapy.pipelines_downloader_photo.DownloaderPhotoPipeline':301
+            'py_mlh_scrapy.pipelines_downloader_photo.DownloaderPhotoPipeline':299
         }
     }
 

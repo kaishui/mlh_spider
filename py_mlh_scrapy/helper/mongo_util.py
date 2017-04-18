@@ -26,7 +26,7 @@ class MongoSupport(object):
 
             self.db = self.client[mongo_dbname]
 
-            logging.info("建立mongo连接:url=%s,dbname=", mongo_url, mongo_dbname)
+            logging.info("建立mongo连接:url,dbname", mongo_url, mongo_dbname)
 
     def get_mongo_id(self):
         return str(ObjectId())
