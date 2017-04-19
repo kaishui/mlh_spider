@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Define here the models for your spider middleware
+# Define here the models for your spider middlewares
 #
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
@@ -10,7 +10,7 @@ from scrapy import signals
 
 class PyMlhScrapySpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
-    # scrapy acts as if the spider middleware does not modify the
+    # scrapy acts as if the spider middlewares does not modify the
     # passed objects.
 
     @classmethod
@@ -22,7 +22,7 @@ class PyMlhScrapySpiderMiddleware(object):
 
     def process_spider_input(response, spider):
         # Called for each response that goes through the spider
-        # middleware and into the spider.
+        # middlewares and into the spider.
 
         # Should return None or raise an exception.
         return None
@@ -37,7 +37,7 @@ class PyMlhScrapySpiderMiddleware(object):
 
     def process_spider_exception(response, exception, spider):
         # Called when a spider or process_spider_input() method
-        # (from other spider middleware) raises an exception.
+        # (from other spider middlewares) raises an exception.
 
         # Should return either None or an iterable of Response, dict
         # or Item objects.

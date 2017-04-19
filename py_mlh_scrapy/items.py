@@ -27,8 +27,8 @@ class DetailItem(scrapy.Item):
     category = Field()                      # 分类
     location = Field()                      # 经维度 {""}
     orginImgs = Field()                     # 原图片 [{orgin:"image url", copyright："版权信息"}]
-    targetImgs = Field()                    # 转化成目标图片urls [{orgin:"来源image url", target:"转化成阿里云oss url", copyright:"版权信息"}]
-
+    type = Field(serializer=str)            # 类型
+    content = Field()                        # 内容文字
 
 # 维度
 class Demension(scrapy.Item):

@@ -9,7 +9,7 @@ import logging
 
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
 
-
+# 更新图片url
 class UpdateMaxPhotoPipeline(object):
     def __init__(self, mongoclient):
         self.mongoclient = mongoclient
@@ -33,11 +33,17 @@ class UpdateMaxPhotoPipeline(object):
         logging.debug("spider name: %s -- %s", spider.name, collectionName)
         # 查询条件
         query = {"orginImgs.orgin": item['origin']}
+        updateField = {}
+        # 原图url
+        if item['target']:
+            updateField["orginImgs.$.target"] = item['target']
+        # oss 中的id
+        if item['ossImgUrl']:
+            updateField["orginImgs.$.ossImgUrl"] = item['ossImgUrl']
+        #  本地地址
+        if item['localImgUrl']:
+            updateField["orginImgs.$.localImgUrl"] = item['localImgUrl']
         # 更新最大图片
-        update = {"$set" : {
-            "orginImgs.$.target" : item['target'],
-            "orginImgs.$.ossImgUrl" : item['ossImgUrl'],
-            "orginImgs.$.localImgUrl" : item['localImgUrl']
-        }}
+        update = {"$set" : updateField}
         self.mongoclient.db[collectionName].update(query, update, multi=True)
         return item

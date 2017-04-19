@@ -1,5 +1,6 @@
 import scrapy
 
+from py_mlh_scrapy.helper.mongo_util import MongoSupport
 from py_mlh_scrapy.items import ImageItem
 
 from urllib.parse import urlparse
@@ -9,7 +10,7 @@ from urllib.parse import urlparse
     author:kaishui
 """
 
-
+# 图片下载
 class scrapy_max_photo(scrapy.Spider):
     name = "arch_max_photo_spider"
 
@@ -23,15 +24,38 @@ class scrapy_max_photo(scrapy.Spider):
 
     # 从mongodb 获取需要爬取的url
     def start_requests(self):
-        # mongoclient = MongoSupport()
-        # collection = mongoclient.db["scrapy_urls"]
-        # urls = collection.find({}, projection={"uri": 1, "_id": 0}, limit=2)
-        # TODO get source photo
-        urls = ["/cn/803258/xiang-shu-wu-gao-ji-zhong-xue-da-lou-trasbordo-arquitectura/585c993ce58ece953e000308-edificio-de-bachillerato-oak-house-school-trasbordo-arquitectura-photo"]
+        mongoclient = MongoSupport()
+
+        collection = mongoclient.db["scrapy_detail"]
+        # 统计pipeline
+        countPipeline = [
+            {"$unwind": "$orginImgs"},
+            {"$match": {"orginImgs.orgin": {"$exists": True}, "orginImgs.ossImgUrl": {"$exists": False}}},
+            {"$project":{"orgin" : "$orginImgs.orgin", "_id":0}},
+            {"$group": {"_id": "null", "count": {"$sum": 1}}}
+        ]
+        # 统计条数
+        countResult = collection.aggregate(countPipeline)
+
         baseUrl = "http://www.archdaily.cn"
-        for uri in urls:
-            print("uri : %s", uri)
-            yield scrapy.Request(url=baseUrl + uri, callback=self.parse_photo)
+        for cresult in countResult:
+            count = cresult['count']
+            skip = 0;
+            while (skip < count):
+                # 查询需要转换的url
+                queryPipeline = [
+                    {"$unwind": "$orginImgs"},
+                    {"$match": {"orginImgs.orgin": {"$exists": True}, "orginImgs.ossImgUrl": {"$exists": False}}},
+                    {"$project": {"orgin": "$orginImgs.orgin", "_id": 0}},
+                    {"$skip": skip},
+                    {"$limit": 100}
+                ]
+                urls = collection.aggregate(queryPipeline)
+                for uri in urls:
+                    print("uri : %s", uri['orgin'])
+                    yield scrapy.Request(url=baseUrl + uri['orgin'], callback=self.parse_photo)
+                #  步进100
+                skip += 100
 
     # 图片详情页面
     def parse_photo(self, response):

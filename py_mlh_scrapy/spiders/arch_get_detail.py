@@ -50,7 +50,10 @@ class scrapy_detail(scrapy.Spider):
         self.getLocations(detail, response)
         # 获取图片
         self.getImgs(detail, response)
-
+        # 类型
+        detail['type'] = response.xpath('//div[@id="content"]/div/div[1]/header/ol/li[3]/a/span/text()').extract_first().strip()
+        # 内容
+        detail['content'] = response.xpath('//*[@id="single-content"]/p/text()').extract()
         yield detail
 
     # 获取图片
@@ -76,9 +79,10 @@ class scrapy_detail(scrapy.Spider):
             latitude = locations.xpath('./a/@data-latitude').extract_first()
             # 经度
             longitude = locations.xpath('./a/@data-longitude').extract_first()
-            address = dict({"latitude": latitude, "longitude": longitude})
-            # 位置
-            detail['location'] = address
+            if latitude and longitude :
+                address = dict({"latitude": latitude, "longitude": longitude})
+                # 位置
+                detail['location'] = address
 
     # 获取维度
     def getDemensions(self, response):
