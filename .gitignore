@@ -16,6 +16,8 @@ downloads/
 eggs/
 .eggs/
 lib/
+dbs/
+logs/
 lib64/
 parts/
 sdist/
@@ -87,3 +89,4 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
