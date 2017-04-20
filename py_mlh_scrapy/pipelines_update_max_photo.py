@@ -32,17 +32,17 @@ class UpdateMaxPhotoPipeline(object):
         collectionName = "scrapy_detail"
         logging.debug("spider name: %s -- %s", spider.name, collectionName)
         # 查询条件
-        query = {"orginImgs.orgin": item['origin']}
+        query = {"originImgs.origin": item['origin']}
         updateField = {}
         # 原图url
         if item['target']:
-            updateField["orginImgs.$.target"] = item['target']
+            updateField["originImgs.$.target"] = item['target']
         # oss 中的id
         if item['ossImgUrl']:
-            updateField["orginImgs.$.ossImgUrl"] = item['ossImgUrl']
+            updateField["originImgs.$.ossImgUrl"] = item['ossImgUrl']
         #  本地地址
         if item['localImgUrl']:
-            updateField["orginImgs.$.localImgUrl"] = item['localImgUrl']
+            updateField["originImgs.$.localImgUrl"] = item['localImgUrl']
         # 更新最大图片
         update = {"$set" : updateField}
         self.mongoclient.db[collectionName].update(query, update, multi=True)

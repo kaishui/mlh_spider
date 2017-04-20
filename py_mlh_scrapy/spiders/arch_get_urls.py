@@ -51,9 +51,9 @@ class scrapy_urls(scrapy.Spider):
         # self.logger.info("url %s", item)
         yield item
 
-process = CrawlerProcess(get_project_settings())
-# 加入爬虫
+# process = CrawlerProcess(get_project_settings())
+# # 加入爬虫
 # process.crawl(scrapy_urls)
-# process.crawl(scrapy_detail)
-process.crawl(scrapy_max_photo)
-process.start()
+# # process.crawl(scrapy_detail)
+# # process.crawl(scrapy_max_photo)
+# process.start()

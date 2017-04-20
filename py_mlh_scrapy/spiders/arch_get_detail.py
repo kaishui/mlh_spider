@@ -12,7 +12,7 @@ from py_mlh_scrapy.items import DetailItem, Demension, ImageItem
 
 
 class scrapy_detail(scrapy.Spider):
-    name = "archdeptspider"
+    name = "scrapy_detail"
 
     # 用户自定义setting 参考settings
     custom_settings = {
@@ -65,11 +65,11 @@ class scrapy_detail(scrapy.Spider):
             # 版权信息
             img["copyright"] = imgLi.xpath('./span/text()').extract_first().strip()
             # 图片uri
-            img["orgin"] = imgLi.xpath('./a/@href').extract_first().strip()
+            img["origin"] = imgLi.xpath('./a/@href').extract_first().strip()
             # 操作
             img["op"] = "act"
             imgs.append(dict(img))
-        detail['orginImgs'] = imgs
+        detail['originImgs'] = imgs
 
     # 获取位置信息
     def getLocations(self, detail, response):

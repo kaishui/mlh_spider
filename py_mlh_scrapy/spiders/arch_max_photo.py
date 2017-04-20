@@ -29,9 +29,9 @@ class scrapy_max_photo(scrapy.Spider):
         collection = mongoclient.db["scrapy_detail"]
         # 统计pipeline
         countPipeline = [
-            {"$unwind": "$orginImgs"},
-            {"$match": {"orginImgs.orgin": {"$exists": True}, "orginImgs.ossImgUrl": {"$exists": False}}},
-            {"$project":{"orgin" : "$orginImgs.orgin", "_id":0}},
+            {"$unwind": "$originImgs"},
+            {"$match": {"originImgs.origin": {"$exists": True}, "originImgs.ossImgUrl": {"$exists": False}}},
+            {"$project":{"origin" : "$originImgs.origin", "_id":0}},
             {"$group": {"_id": "null", "count": {"$sum": 1}}}
         ]
         # 统计条数
@@ -44,16 +44,16 @@ class scrapy_max_photo(scrapy.Spider):
             while (skip < count):
                 # 查询需要转换的url
                 queryPipeline = [
-                    {"$unwind": "$orginImgs"},
-                    {"$match": {"orginImgs.orgin": {"$exists": True}, "orginImgs.ossImgUrl": {"$exists": False}}},
-                    {"$project": {"orgin": "$orginImgs.orgin", "_id": 0}},
+                    {"$unwind": "$originImgs"},
+                    {"$match": {"originImgs.origin": {"$exists": True}, "originImgs.ossImgUrl": {"$exists": False}}},
+                    {"$project": {"origin": "$originImgs.origin", "_id": 0}},
                     {"$skip": skip},
                     {"$limit": 100}
                 ]
                 urls = collection.aggregate(queryPipeline)
                 for uri in urls:
-                    print("uri : %s", uri['orgin'])
-                    yield scrapy.Request(url=baseUrl + uri['orgin'], callback=self.parse_photo)
+                    print("uri : %s", uri['origin'])
+                    yield scrapy.Request(url=baseUrl + uri['origin'], callback=self.parse_photo)
                 #  步进100
                 skip += 100
 

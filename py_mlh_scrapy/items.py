@@ -26,7 +26,7 @@ class DetailItem(scrapy.Item):
     createTime = Field(serializer=str)      # 创建时间
     category = Field()                      # 分类
     location = Field()                      # 经维度 {""}
-    orginImgs = Field()                     # 原图片 [{orgin:"image url", copyright："版权信息"}]
+    originImgs = Field()                     # 原图片 [{origin:"image url", copyright："版权信息"}]
     type = Field(serializer=str)            # 类型
     content = Field()                        # 内容文字
 
