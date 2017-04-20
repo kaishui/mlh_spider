@@ -23,7 +23,7 @@ class DownloaderPhotoPipeline(ImagesPipeline):
     ossclient = AliOss()
 
     # images store
-    PHOTO_DIR = "/data/scrapy_download_photo/"
+    PHOTO_DIR = "/opt/spider/scrapy_download_photo/"
 
     def get_media_requests(self, item, info):
         yield scrapy.Request(item['target'])
