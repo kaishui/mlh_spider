@@ -18,9 +18,12 @@ class MongoSupport(object):
         '''
         if self.db is None:
             if mongo_url is None:
-                mongo_url = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_dev?authMechanism=SCRAM-SHA-1"
+                # dev env
+                # mongo_url = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_dev?authMechanism=SCRAM-SHA-1"
+                mongo_url = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_test?authMechanism=SCRAM-SHA-1"
             if mongo_dbname is None:
-                mongo_dbname = "mlh_dev"
+                # mongo_dbname = "mlh_dev"
+                mongo_dbname = "mlh_test"
 
             self.client = MongoClient(mongo_url)
 

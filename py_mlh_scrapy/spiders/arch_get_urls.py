@@ -11,6 +11,9 @@ from py_mlh_scrapy.items import ListItem
 
 from py_mlh_scrapy.spiders.arch_get_detail import scrapy_detail
 from py_mlh_scrapy.spiders.arch_max_photo import scrapy_max_photo
+from py_mlh_scrapy.spiders.arch_max_photo_page_redis import scrapy_max_picture_page_spider
+from py_mlh_scrapy.spiders.arch_max_photo_page_start_urls import scrapy_max_picture_page_start_urls_spider
+
 
 class scrapy_urls(scrapy.Spider):
     # 爬虫名称
@@ -19,6 +22,7 @@ class scrapy_urls(scrapy.Spider):
     # setting for this spider
     custom_settings = {
         "ITEM_PIPELINES" : {
+            'py_mlh_scrapy.pipelines_save_urls_redis.UrlsRedisPipeline': 299,
             'py_mlh_scrapy.pipelines_save_urls.UrlsPipeline': 300
         }
     }
@@ -51,9 +55,12 @@ class scrapy_urls(scrapy.Spider):
         # self.logger.info("url %s", item)
         yield item
 
-# process = CrawlerProcess(get_project_settings())
+process = CrawlerProcess(get_project_settings())
 # # 加入爬虫
 # process.crawl(scrapy_urls)
-# # process.crawl(scrapy_detail)
-# # process.crawl(scrapy_max_photo)
-# process.start()
+# process.crawl(scrapy_detail)
+# process.crawl(scrapy_max_photo)
+# process.crawl(scrapy_max_demo)
+# process.crawl(scrapy_max_picture_page_spider)
+process.crawl(scrapy_max_picture_page_start_urls_spider)
+process.start()

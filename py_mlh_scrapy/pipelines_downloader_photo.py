@@ -14,6 +14,8 @@ from scrapy.exceptions import DropItem
 from scrapy.pipelines.images import ImagesPipeline
 
 # 下载图片
+from twisted.internet.threads import deferToThread
+
 from py_mlh_scrapy.helper.aliyunoss import AliOss
 
 
@@ -23,7 +25,12 @@ class DownloaderPhotoPipeline(ImagesPipeline):
     ossclient = AliOss()
 
     # images store
-    PHOTO_DIR = "/opt/spider/scrapy_download_photo/"
+    # PHOTO_DIR = store_uri
+
+    # 图片文件夹路径
+    # TODO: GET FROM SETTINGS
+    def getPhotoPath(self):
+        return "/opt/spider/scrapy_download_photo/"
 
     def get_media_requests(self, item, info):
         yield scrapy.Request(item['target'])
@@ -34,15 +41,26 @@ class DownloaderPhotoPipeline(ImagesPipeline):
         if not image_paths:
             raise DropItem("Item contains no images")
         item['localImgUrl'] = image_paths[0]
+        # 上传到oss
+        return deferToThread(self._upload_to_alioss, item)
 
+    # oss object key
+    def getId(self):
         # 时间搓 + objectId 当ID
         id = datetime.datetime.now().strftime("%Y%m%d%H%M%s") + str(ObjectId())
         logging.debug("id :", id)
-        photoDir = self.PHOTO_DIR + item['localImgUrl']
+        return id
+
+    # 上传到oss
+    def _upload_to_alioss(self, item):
+        item['ossImgUrl'] = self.getId()
+        photoDir = self.getPhotoPath() + item['localImgUrl']
         # 保存到 aliyun oss中 TODO 异步
-        ossResult = self.ossclient.bucket.put_object_from_file(id, photoDir)
+        ossResult = self.ossclient.bucket.put_object_from_file(item['ossImgUrl'], photoDir)
         # oss 上传成功
         if 200 == ossResult.status:
-            item['ossImgUrl'] = id
-        logging.debug("oss save result: ", ossResult)
-        return item
+            logging.debug("oss upload success '%s'", item['ossImgUrl'])
+            return item
+        else:
+            logging.error("item:", item)
+            raise DropItem("上传到OSS失败")

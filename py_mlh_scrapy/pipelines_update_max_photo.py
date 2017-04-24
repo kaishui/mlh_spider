@@ -45,5 +45,6 @@ class UpdateMaxPhotoPipeline(object):
             updateField["originImgs.$.localImgUrl"] = item['localImgUrl']
         # 更新最大图片
         update = {"$set" : updateField}
-        self.mongoclient.db[collectionName].update(query, update, multi=True)
+        updateResult = self.mongoclient.db[collectionName].update(query, update, multi=True)
+        logging.debug("update mongo result %s", str(updateResult))
         return item
