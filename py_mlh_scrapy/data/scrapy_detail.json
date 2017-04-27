@@ -1,0 +1,123 @@
+{
+    "_id" : "58f89a845a465c786057954b",
+    "url" : "http://www.archdaily.cn/cn/797030/ou-zhou-di-zhi-jiao-yu-zhong-xin-wxca",
+    "title" : "欧洲地质教育中心/ WXCA",
+    "originImgs" : [
+        {
+            "copyright" : "© Daniel Ciesielski",
+            "origin" : "/cn/797030/ou-zhou-di-zhi-jiao-yu-zhong-xin-wxca/5786ff05e58ece8acc0001ca-european-centre-for-geological-education-wxca-image",
+            "op" : "act",
+            "target" : "http://images.adsttc.com.qtlcn.com/media/images/5786/ff05/e58e/ce8a/cc00/01ca/large_jpg/17.jpg?1468464896",
+            "ossImgUrl" : "201704210954149273964458f9663c5a465c1227adddde",
+            "localImgUrl" : "full/15e603c75930f562b5953eba7e0272a3a39a730c.jpg"
+        },
+        {
+            "copyright" : "© Daniel Ciesielski",
+            "origin" : "/cn/797030/ou-zhou-di-zhi-jiao-yu-zhong-xin-wxca/5786fd90e58ece098e0000c6-european-centre-for-geological-education-wxca-image",
+            "op" : "act",
+            "target" : "http://images.adsttc.com.qtlcn.com/media/images/5786/fd90/e58e/ce09/8e00/00c6/large_jpg/31.jpg?1468464524",
+            "ossImgUrl" : "201704210955149273973158f966935a465c1227adde10",
+            "localImgUrl" : "full/aac1f151d51eeb4de62ecdf11d0fbe12a6b1740a.jpg"
+        }
+    ],
+    "location" : {
+        "latitude" : "50.80544889999999",
+        "longitude" : "20.4781219"
+    },
+    "tags" : [
+        "项目",
+        "项目建成",
+        "选定的项目",
+        "科学中心",
+        "Chęciny",
+        "波兰"
+    ],
+    "createTime" : "05:00 - 12 十月, 2016",
+    "type" : "科学中心",
+    "category" : [
+        {
+            "text" : "WXCA",
+            "attr" : "建筑师"
+        },
+        {
+            "text" : " 波兰",
+            "attr" : "地址"
+        },
+        {
+            "text" : "Szczepan Wroński, Paweł Grodzicki, Krzysztof Budzisz, Zbigniew Wroński",
+            "attr" : "责任建筑师"
+        },
+        {
+            "text" : "8450.0 平米",
+            "attr" : "建筑面积"
+        },
+        {
+            "text" : "2015",
+            "attr" : "项目年份"
+        },
+        {
+            "text" : "Daniel Ciesielski",
+            "attr" : "摄影师"
+        },
+        {
+            "text" : "Hide\">加载中……",
+            "attr" : "厂家"
+        },
+        {
+            "text" : "Michał Czerwiński, Marcin Jurusik, Ewa Gajda, Katarzyna Błaszkiewicz, Maciej Rudnicki, Agnieszka Nowicka, Katarzyna Kwiatkowska, Jacek Hawrylak, Marta Sękulska, Patrycja Michalak – Dębiec",
+            "attr" : "团队"
+        },
+        {
+            "text" : "Phd. Piotr PekalaI (AKUSTIX)",
+            "attr" : "声学"
+        },
+        {
+            "text" : "PROFA",
+            "attr" : "立面设计"
+        },
+        {
+            "text" : "RS AK",
+            "attr" : "景观设计"
+        },
+        {
+            "text" : "CHODOR-PROJEKT Sp. z o.o. (now BIURO PROJEKTÓW BUDOWNICTWA Sp. z o.o.)",
+            "attr" : "技术项目"
+        },
+        {
+            "text" : "Katarzyna Micigolska",
+            "attr" : "施工"
+        },
+        {
+            "text" : "Karolina Wozniak",
+            "attr" : "设施"
+        },
+        {
+            "text" : "University of Warsw",
+            "attr" : "投资"
+        },
+        {
+            "text" : "ANNA-BUD sp. z o.o., ",
+            "attr" : "总承建商"
+        },
+        {
+            "text" : "Rafal Adamski, Grzegorz Snochowski ",
+            "attr" : "联络"
+        },
+        {
+            "text" : "35,577 sqm",
+            "attr" : "场地面积"
+        },
+        {
+            "text" : "3,700 sqm",
+            "attr" : "总建筑面积"
+        },
+        {
+            "text" : "6,500 sqm",
+            "attr" : "实用面积"
+        },
+        {
+            "text" : "$30000000 PLN ",
+            "attr" : "成本"
+        }
+    ]
+}

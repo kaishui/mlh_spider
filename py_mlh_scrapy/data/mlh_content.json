@@ -1,0 +1,310 @@
+{
+    "_id" : "590067a40cf2e483876f035a",
+    "title" : [
+        {
+            "name" : "项目名称fengzt"
+        }
+    ],
+    "address" : {
+        "detail" : {
+            "name" : "马场路"
+        }
+    },
+    "buildingArea" : "1000",
+    "coverPlace" : "1222",
+    "volumeRate" : "12",
+    "greeningRate" : "30",
+    "investor" : [
+        {
+            "name" : "投资方"
+        }
+    ],
+    "totalInvestment" : {
+        "money" : "10000"
+    },
+    "designTime" : NumberLong(1485820800000),
+    "buildEndTime" : NumberLong(1485820800000),
+    "category" : [
+        {
+            "id" : "culture",
+            "name" : "文化建筑"
+        },
+        {
+            "id" : "education",
+            "name" : "教育建筑"
+        },
+        {
+            "id" : "business",
+            "name" : "商业建筑"
+        },
+        {
+            "id" : "office",
+            "name" : "办公建筑"
+        }
+    ],
+    "titleImage" : [ //TODO first picture
+        {
+            "id" : "201704026172115M59LMHOMS6L6DAK897DC3A05E265D615BDBA386506005BFBBFD28A",
+            "name" : "fec9c6efa89e846a58ee6838ff07088cb1e67431.jpg"
+        }
+    ],
+    "lbs" : "23.1290765766,113.2643446427",
+    "buildingDesign" : [
+        {
+            "name" : "建筑设计单位"
+        }
+    ],
+    "sceneryDesignCompany" : [
+        {
+            "name" : "景观设计单位"
+        }
+    ],
+    "indoorDesign" : [
+        {
+            "name" : "室内设计单位"
+        }
+    ],
+    "planningDesign" : [
+        {
+            "name" : "规划设计单位"
+        }
+    ],
+    "buildingMainDesigner" : [
+        {
+            "name" : "建筑主创设计师"
+        }
+    ],
+    "sceneryDesignMainDesigner" : [
+        {
+            "name" : "景观主创设计师"
+        }
+    ],
+    "indoorMainDesigner" : [
+        {
+            "name" : "室内主创设计师"
+        }
+    ],
+    "drawingDesign" : [
+        {
+            "name" : "施工图设计"
+        }
+    ],
+    "structureDesign" : [
+        {
+            "name" : "结构设计单位"
+        }
+    ],
+    "structuralEngineer" : [
+        {
+            "name" : "结构工程师"
+        }
+    ],
+    "waterSupplyEngineer" : [
+        {
+            "name" : "给排水工程师"
+        }
+    ],
+    "HVACDesign" : [
+        {
+            "name" : "暖通设计单位"
+        }
+    ],
+    "HVACEngineer" : [
+        {
+            "name" : "暖通工程师"
+        }
+    ],
+    "electricalDesign" : [
+        {
+            "name" : "电气设计单位"
+        }
+    ],
+    "electricalEngineer" : [
+        {
+            "name" : "电气工程师"
+        }
+    ],
+    "devBuilder" : [
+        {
+            "name" : "开发建设方"
+        }
+    ],
+    "projectContract" : [
+        {
+            "name" : "开发建设方"
+        }
+    ],
+    "buildTeam" : [
+        {
+            "name" : "开发建设方"
+        }
+    ],
+    "superviseCompany" : [
+        {
+            "name" : "开发建设方"
+        }
+    ],
+    "engineeringCostCompany" :[
+        {
+            "name" : "开发建设方"
+        }
+    ],
+    "propertyCompany" : [
+        {
+            "name" : "物业管理"
+        }
+    ],
+    "awards" : [
+        {
+            "name" : "获奖情况"
+        }
+    ],
+    "takePhoto" : [
+        {
+            "name" : "摄影"
+        }
+    ],
+    "poster" : [
+        {
+            "id" : "201704026172546G3DX12QNXEWS1JA96051D6CD55D38DE4B8B1496631F599942D7083",
+            "name" : "b180c73589b04156ccc4f05d2c6b6e26096ffeb3.jpg"
+        }
+    ],
+    "op" : "ACT",
+    "createTime" : NumberLong(1493198756839),
+    "status" : "draft",
+    "source" : "front",
+    "createUser" : {
+        "userId" : "58c647d121500e634c04cb29",
+        "realName" : "fubg1"
+    },
+    "type" : "product",
+    "ownerId" : "58c647d121500e634c04cb29",
+    "hasOwner" : "Y",
+    "ownerTime" : NumberLong(1493198756839),
+    "updateTime" : NumberLong(1493198756839),
+    "updateUser" : {
+        "userId" : "58c647d121500e634c04cb29",
+        "realName" : "fubg1"
+    },
+    "opening" : "N",
+    "author" : {
+        "id" : "58c647d121500e634c04cb29",
+        "name" : "fubg1"
+    },
+    "resurl" : "/detail/590067a40cf2e483876f035a",
+    "imgurl" : "201704026172115M59LMHOMS6L6DAK897DC3A05E265D615BDBA386506005BFBBFD28A",
+    "tag" : [
+        {
+            "name" : "项目名称fengzt"
+        },
+        {
+            "name" : "projectEnglishName"
+        },
+        {
+            "name" : "棕榈"
+        },
+        {
+            "name" : "fengzt"
+        },
+        {
+            "name" : "投资方"
+        },
+        {
+            "id" : "culture",
+            "name" : "文化建筑"
+        },
+        {
+            "id" : "education",
+            "name" : "教育建筑"
+        },
+        {
+            "id" : "business",
+            "name" : "商业建筑"
+        },
+        {
+            "id" : "office",
+            "name" : "办公建筑"
+        },
+        {
+            "id" : "201704026172115M59LMHOMS6L6DAK897DC3A05E265D615BDBA386506005BFBBFD28A",
+            "name" : "fec9c6efa89e846a58ee6838ff07088cb1e67431.jpg"
+        },
+        {
+            "name" : "建筑设计"
+        },
+        {
+            "name" : "建筑设计单位"
+        },
+        {
+            "name" : "景观设计单位"
+        },
+        {
+            "name" : "室内设计单位"
+        },
+        {
+            "name" : "规划设计单位"
+        },
+        {
+            "name" : "建筑主创设计师"
+        },
+        {
+            "name" : "景观主创设计师"
+        },
+        {
+            "name" : "室内主创设计师"
+        },
+        {
+            "name" : "施工图设计"
+        },
+        {
+            "name" : "结构设计单位"
+        },
+        {
+            "name" : "结构工程师"
+        },
+        {
+            "name" : "给排水工程师"
+        },
+        {
+            "name" : "暖通设计单位："
+        },
+        {
+            "name" : "暖通工程师："
+        },
+        {
+            "name" : "电气设计单位："
+        },
+        {
+            "name" : "电气工程师："
+        },
+        {
+            "name" : "开发建设方："
+        },
+        {
+            "name" : "开发建设方："
+        },
+        {
+            "name" : "开发建设方："
+        },
+        {
+            "name" : "开发建设方："
+        },
+        {
+            "name" : "开发建设方："
+        },
+        {
+            "name" : "物业管理："
+        },
+        {
+            "name" : "获奖情况："
+        },
+        {
+            "name" : "摄影："
+        },
+        {
+            "id" : "201704026172546G3DX12QNXEWS1JA96051D6CD55D38DE4B8B1496631F599942D7083",
+            "name" : "b180c73589b04156ccc4f05d2c6b6e26096ffeb3.jpg"
+        }
+    ]
+}

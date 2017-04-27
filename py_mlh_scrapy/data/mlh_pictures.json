@@ -1,0 +1,35 @@
+{
+    "_id" : "59006b390cf2bec6bc4d7be4",
+    "picture" : [
+        {
+            "id" : "20170402617403917ZKSTX57POGAJTT5FD70727D56149D4E6855B4FBE0B7DD3A6C810",
+            "watermark" : "版权信息"
+        },
+        {
+            "id" : "201704026174042OEDN43514T2S96IYRT68D952CB12CF0A33254B9C13346317294CFD",
+            "watermark" : "版权信息"
+        }
+    ],
+    "parentType" : "product",
+    "op" : "ACT",
+    "createTime" : NumberLong(1493199673569),
+    "status" : "released",
+    "source" : "front",
+    "createUser" : {
+        "userId" : "58c647d121500e634c04cb29",
+        "realName" : "fubg1"
+    },
+    "author" : {
+        "id" : "58c647d121500e634c04cb29",
+        "name" : "fubg1"
+    },
+    "type" : "picture",
+    "fkTag" : [
+        "590067a40cf2e483876f035a" //项目ID
+    ],
+    "tag" : [
+        {
+            "name" : "59006b390cf2bec6bc4d7be4"
+        }
+    ]
+}
