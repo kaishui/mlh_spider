@@ -107,6 +107,7 @@ MONGODB_URI = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_dev"
 
 # 图片保存在本地的地址
 IMAGES_STORE = '/opt/spider/scrapy_download_photo'
+# IMAGES_STORE = '/backup/spider/images'
 
 
 # redis

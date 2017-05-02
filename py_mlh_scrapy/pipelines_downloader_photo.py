@@ -55,12 +55,12 @@ class DownloaderPhotoPipeline(ImagesPipeline):
     def _upload_to_alioss(self, item):
         item['ossImgUrl'] = self.getId()
         photoDir = self.getPhotoPath() + item['localImgUrl']
-        # 保存到 aliyun oss中 TODO 异步
+        # 保存到 aliyun oss中
         ossResult = self.ossclient.bucket.put_object_from_file(item['ossImgUrl'], photoDir)
         # oss 上传成功
         if 200 == ossResult.status:
             logging.debug("oss upload success '%s'", item['ossImgUrl'])
             return item
         else:
-            logging.error("item:", item)
+            logging.error("item: %s, oss result: %s", str(item), str(ossResult))
             raise DropItem("上传到OSS失败")

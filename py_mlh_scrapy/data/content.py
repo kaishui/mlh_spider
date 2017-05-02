@@ -1,13 +1,16 @@
 import logging
-from sqlite3 import Date, time
+import re
+from sqlite3 import time, datetime
 
 from bson import ObjectId
 from bson.int64 import long
 
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
 
+
 class SynContent(object):
     logger = logging.getLogger("SynContent")
+    logger.setLevel(logging.DEBUG)
 
     mongoclient = MongoSupport()
 
@@ -79,6 +82,37 @@ class SynContent(object):
                 break;
         return category;
 
+    """
+        @:param key 关键词
+        @:param year 年份
+        @:return ms
+    """
+    def yearToTimestamp(self, key, year):
+        if "建成时间" == key or "设计时间" == key:
+            y = self.stringExtractFirstNumber(year)
+            self.logger.debug("year = ", y)
+            if int(float(y)) > 0 :
+                if len(y) > 4:
+                    y = y[0:4]
+                return long(time.mktime(datetime.datetime(year=int(float(y)), month=1, day=1).timetuple()) * 1000)
+            else:
+                return 0
+        else:
+            return 0
+
+    """
+        提取第一个数字
+        @:param text 需要提取的文本
+        @:return 返回找到的第一个数字
+    """
+    def stringExtractFirstNumber(self, text):
+        if text is None:
+            return 0
+        numberArr = re.findall(r"[-+]?\d*\.\d+|\d+",text)
+        if numberArr is not None and len(numberArr):
+            return numberArr[0]
+        else:
+            return 0
 
     # /**
     #  * 转换成马良行维度信息
@@ -98,16 +132,16 @@ class SynContent(object):
                 }
             },
             "建筑面积": {
-                "buildingArea": value  # TODO 转化成字符串 数字
+                "buildingArea": str(self.stringExtractFirstNumber(value))
             },
             "容积率": {
-                "volumeRate": value  # TODO 转化成字符串 数字
+                "volumeRate": str(self.stringExtractFirstNumber(value)) # 转化成字符串 数字
             },
             "占地面积": {
-                "coverPlace": value  # TODO 转化成字符串 数字
+                "coverPlace": str(self.stringExtractFirstNumber(value))  # 转化成字符串 数字
             },
             "绿化率": {
-                "greeningRate": value  # TODO 转化成字符串 数字
+                "greeningRate": str(self.stringExtractFirstNumber(value))  # 转化成字符串 数字
             },
             "投资方": {
                 "investor": [
@@ -122,10 +156,10 @@ class SynContent(object):
                 }
             },
             "设计时间": {
-                "designTime": long(1485820800000)  # TODO 转化成字符串 数字
+                "designTime": self.yearToTimestamp(key, value)
             },
             "建成时间": {
-                "buildEndTime": long(1485820800000)  # TODO 转化成字符串 数字
+                "buildEndTime": self.yearToTimestamp(key, value)
             },
             "建筑设计单位": {
                 "buildingDesign": [
@@ -144,7 +178,7 @@ class SynContent(object):
             "室内设计单位": {
                 "planningDesign": [
                     {
-                        "name": "规划设计单位"
+                        "name": value
                     }
                 ]
             },
@@ -295,36 +329,34 @@ class SynContent(object):
     #  * @param sdetail
     #  */
     def setImgToContent(self, project, sdetail):
+        if len(sdetail["originImgs"]) == 0 :
+            return project;
         # 封面图
-        firstImgObject = {};
         for img in sdetail["originImgs"]:
             # oss 上的image id
-            ossUrl = img["ossImgUrl"]
-            if ossUrl is not None:
-                firstImgObject = img;
+            if "ossImgUrl" in img and img["ossImgUrl"] is not None:
+                # 标题图
+                project["titleImage"] = [
+                    {
+                        "id": img["ossImgUrl"],
+                        "name": img["copyright"]
+                    }
+                ];
+                # 封面图
+                project["poster"] = [
+                    {
+                        "id": img["ossImgUrl"],
+                        "name": img["copyright"]
+                    }
+                ];
+                # 默认图片
+                project["imgurl"] = img["ossImgUrl"]
+                # 增加tag
+                project["tag"].append({
+                    "id": img["ossImgUrl"],
+                    "name": img["copyright"]
+                });
                 break;
-        # 标题图
-        project["titleImage"] = [
-            {
-                "id": firstImgObject["ossImgUrl"],
-                "name": firstImgObject["copyright"]
-            }
-        ];
-        # 封面图
-        project["poster"] = [
-            {
-                "id": firstImgObject["ossImgUrl"],
-                "name": firstImgObject["copyright"]
-            }
-        ];
-        # 默认图片
-        project["imgurl"] = firstImgObject["ossImgUrl"]
-        # 增加tag
-        project["tag"].append({
-            "id": firstImgObject["ossImgUrl"],
-            "name": firstImgObject["copyright"]
-        });
-
         return project;
 
 
@@ -386,7 +418,7 @@ class SynContent(object):
     #  */
     def initProject(self):
         # 创建时间
-        createTime = long(time.time());
+        createTime = long(time.time()*1000);
         return {
             "op": "ACT",
             "createTime": createTime,
@@ -419,69 +451,78 @@ class SynContent(object):
     #  * 运行
     #  */
     def start(self):
-        # count = db.getCollection('scrapy_detail').count({"isDeal": {"$exists": 0}});
-        # print(count);
-        # for (step = 0; step < count; step = step + 50) {
-        # 获取爬虫详情数据数据
-        details = self.mongoclient.db['scrapy_detail'].aggregate(
-            [
-                {"$match": {"isDeal": {"$exists": 0}}},
-                {
-                    "$project": {
-                        "category": 1,
-                        "url": 1,
-                        "title": 1,
-                        "originImgs": 1,
-                        "location": 1,
-                        "tags": 1,
-                        "createTime": 1,
-                        "type": 1
+        count = self.mongoclient.db['scrapy_detail'].count({"isDeal": {"$exists": 0}});
+        self.logger.debug("count =", count);
+
+        skip = 0;
+        while skip < count:
+            skip += 500;
+            # 获取爬虫详情数据数据
+            details = self.mongoclient.db['scrapy_detail'].aggregate(
+                [
+                    {"$match": {"isDeal": {"$exists": 0}}},
+                    {
+                        "$project": {
+                            "category": 1,
+                            "url": 1,
+                            "title": 1,
+                            "originImgs": 1,
+                            "location": 1,
+                            "tags": 1,
+                            "createTime": 1,
+                            "type": 1
+                        }
+                    },
+                    {"$sort": {"_id": -1}},
+                    {"$skip": 0},
+                    {"$limit": 500}
+                ]
+            )
+            for sdetail in details:
+                self.logger.debug("scrapy detail : %s", str(sdetail))
+                # b_content项目
+                project = self.initProject();
+
+                # 项目ID
+                projectId = str(ObjectId());
+                project["_id"] = projectId;
+                # 访问uri
+                project["resurl"] = "/detail/" + projectId;
+                # 标题
+                project["title"] = [
+                    {
+                        "name": sdetail["title"]
                     }
-                },
-                {"$sort": {"_id": -1}},
-                {"$skip": 0},
-                {"$limit": 1}
-            ]
-        )
-        for sdetail in details:
-            self.logger.debug("scrapy detail : %s", str(sdetail))
-            # b_content项目
-            project = self.initProject();
+                ];
 
-            # 项目ID
-            projectId = str(ObjectId());
-            project["_id"] = projectId;
-            # 访问uri
-            project["resurl"] = "/detail/" + projectId;
-            # 标题
-            project["title"] = [
-                {
-                    "name": sdetail["title"]
-                }
-            ];
+                project["tag"].append({
+                        "name": sdetail["title"]
+                    });
 
-            # 经维度
-            # if (undefined != sdetail.location && null != sdetail.location.latitude
-            #     && "null" != sdetail.location.latitude) {
-            if "location" in sdetail:
-                project['lbs'] = sdetail["location"]["latitude"] + "," + sdetail["location"]["longitude"]
+                # 经维度
+                # if (undefined != sdetail.location && null != sdetail.location.latitude
+                #     && "null" != sdetail.location.latitude) {
+                if "location" in sdetail:
+                    project['lbs'] = sdetail["location"]["latitude"] + "," + sdetail["location"]["longitude"]
 
-            # 设置内容图片
-            project = self.setImgToContent(project, sdetail);
-            # 设置维度信息
-            project = self.setDimensions(project, sdetail);
-            # 设置类型
-            project = self.setCategorys(sdetail, project);
+                # 设置内容图片
+                project = self.setImgToContent(project, sdetail);
+                # 设置维度信息
+                project = self.setDimensions(project, sdetail);
+                # 设置类型
+                project = self.setCategorys(sdetail, project);
 
-            self.logger.debug("project: ", str(project));
-            # 保存项目信息
-            self.mongoclient.db['b_content'].save(project);
+                self.logger.debug("project: ", str(project));
+                # 不存在封面图就放弃这个项目
+                if "imgurl" in project:
+                    # 保存项目信息
+                    self.mongoclient.db['b_content_spider'].save(project);
 
-            # 标志这条爬虫数据已经处理过
-            self.mongoclient.db['scrapy_detail'].update({"_id": sdetail["_id"]}, {"$set": {"isDeal": "Y"}});
+                    # 标志这条爬虫数据已经处理过
+                    self.mongoclient.db['scrapy_detail'].update({"_id": sdetail["_id"]}, {"$set": {"isDeal": "Y"}});
 
-            # 设置图片
-            self.setPictures(projectId, sdetail["originImgs"]);
+                    # 设置图片
+                    self.setPictures(projectId, sdetail["originImgs"]);
 
 
     # /**
@@ -501,7 +542,7 @@ class SynContent(object):
             "_id": pictureId,
             "parentType": "product",
             "op": "ACT",
-            "createTime": long(time.time()),
+            "createTime": long(time.time()*1000),
             "status": "released",
             "source": "spider",
             "sourceWebsite": "archdaily",
@@ -527,20 +568,24 @@ class SynContent(object):
         # 设置图片信息
         for img in originImgs:
             # oss 上的image id
-            ossUrl = img["ossImgUrl"];
-            if ossUrl is not None:
+            if "ossImgUrl"in img and img["ossImgUrl"] is not None:
                 picture["picture"].append({
-                    "id": ossUrl,
+                    "id": img["ossImgUrl"],
                     "watermark": img["copyright"]
                 });
 
         self.logger.debug("picture: %s", str(picture))
         # 保存图片信息
-        self.mongoclient.db['b_content'].save(picture);
+        self.mongoclient.db['b_content_spider'].save(picture);
 
 
 if __name__ == '__main__':
     # item = changToMlhContentDimension("绿化率", "fengzt")
     # print(item)
     SynContent().start()
+    # date = time.mktime(datetime.datetime.strptime("2015", "%Y").date().timetuple()) * 1000
+    # print(date)
+    #
+    # number = SynContent().stringExtractFirstNumber("400.0 m2")
+    # print(number)
     # pass

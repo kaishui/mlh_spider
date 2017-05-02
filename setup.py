@@ -9,7 +9,13 @@ setup(
     # installed or upgraded on the target machine
     install_requires=[
         'Scrapy>=1.3.3',
-        'pymongo==3.4.0'
+        'pymongo==3.4.0',
+        'oss2==2.3.0',
+        'scrapy_redis==0.6.8',
+        'Twisted==17.1.0',
+        'pymongo==3.4.0',
+        'six==1.10.0',
+        'setuptools==20.7.0'
     ],
 
     package_data={
