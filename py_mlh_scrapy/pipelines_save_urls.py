@@ -10,6 +10,7 @@ import logging
 from bson import ObjectId
 
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
+from py_mlh_scrapy.helper.static_config import StaticConfig
 
 
 class UrlsPipeline(object):
@@ -31,7 +32,7 @@ class UrlsPipeline(object):
     # 存储 urls 列表页提取的uri
     def process_item(self, item, spider):
         logging.debug("spider name: %s", spider.name)
-        collectionName = spider.__class__.__name__
+        collectionName = StaticConfig().archContentUrls
         logging.debug("spider name: %s -- %s", spider.name, collectionName)
         if item is not None:
             # 每一页的列表uri

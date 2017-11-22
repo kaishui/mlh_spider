@@ -3,6 +3,7 @@ import logging
 import scrapy
 
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
+from py_mlh_scrapy.helper.static_config import StaticConfig
 from py_mlh_scrapy.items import DetailItem, Demension, ImageItem
 
 """
@@ -17,18 +18,19 @@ class scrapy_detail(scrapy.Spider):
     # 用户自定义setting 参考settings
     custom_settings = {
         "ITEM_PIPELINES": {
-            'py_mlh_scrapy.pipelines_detail.PipelineDetail': 1
+            'scrapy_redis.pipelines.RedisPipeline': 298,
+            'py_mlh_scrapy.pipelines_detail.PipelineDetail': 299
         }
     }
 
     # 从mongodb 获取需要爬取的url
     def start_requests(self):
         mongoclient = MongoSupport()
-        collection = mongoclient.db["scrapy_urls"]
+        collection = mongoclient.db[StaticConfig().archContentUrls]
         urls = collection.find({}, projection={"uri": 1, "_id": 0})
-        baseUrl = "http://www.archdaily.cn"
+        baseUrl = StaticConfig().arch
         for uri in urls:
-            print("uri : %s", uri["uri"])
+            logging.debug("uri : %s", uri["uri"])
             yield scrapy.Request(url=baseUrl +  uri["uri"], callback=self.parse_detail)
 
     # 详情页面
@@ -41,7 +43,7 @@ class scrapy_detail(scrapy.Spider):
             "//h1[@class='afd-title-big afd-title-big--bmargin-small afd-relativeposition']/text()") \
             .extract_first().strip()
         # 发布时间
-        detail["createTime"] = response.xpath('//*[@id="single-meta"]/li[1]/text()').extract_first().strip()
+        self.getTime(detail, response)
         # 获取维度
         detail['category'] = self.getDemensions(response)
         # 标签
@@ -51,10 +53,24 @@ class scrapy_detail(scrapy.Spider):
         # 获取图片
         self.getImgs(detail, response)
         # 类型
-        detail['type'] = response.xpath('//div[@id="content"]/div/div[1]/header/ol/li[3]/a/span/text()').extract_first().strip()
-        # 内容
-        detail['content'] = response.xpath('//*[@id="single-content"]/p/text()').extract()
+        detail['type'] = response.xpath('//header/ol/li[3]/a/span/text()').extract_first().strip()
+        self.getDetail(detail, response)
         yield detail
+
+    # createTime
+    def getTime(self, detail, response):
+        detail["createTime"] = response.xpath('//*[@id="single-meta"]/li[1]/text()').extract_first().strip()
+
+    # content
+    def getDetail(self, detail, response):
+        # 内容
+        contents = response.xpath('//*[@id="single-content"]/p/text()').extract()
+        cts = []
+        for content in contents:
+            if content.strip() != "":
+                cts.append(content.strip())
+        detail['content'] = cts
+
 
     # 获取图片
     def getImgs(self, detail, response):
@@ -92,11 +108,11 @@ class scrapy_detail(scrapy.Spider):
         for d in vertors:
             logging.debug("demension : %s", d.extract())
             demension = Demension()
-            demension['attr'] = d.xpath("./h3/text()").extract_first()
+            demension['attr'] = d.xpath("./h3/text()").extract_first().strip()
             # 如果有链接就有内容，如果没有链接 if 部分
             text = d.xpath("./div/a/text()").extract_first()
             if text is None:
                 text = d.xpath('./div/text()').extract_first()
-            demension["text"] = text
+            demension["text"] = text.strip()
             demensions.append(dict(demension))
         return demensions

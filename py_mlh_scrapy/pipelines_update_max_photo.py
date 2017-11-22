@@ -10,6 +10,9 @@ import logging
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
 
 # 更新图片url
+from py_mlh_scrapy.helper.static_config import StaticConfig
+
+
 class UpdateMaxPhotoPipeline(object):
     def __init__(self, mongoclient):
         self.mongoclient = mongoclient
@@ -29,7 +32,7 @@ class UpdateMaxPhotoPipeline(object):
     # 更新最大图片信息
     def process_item(self, item, spider):
         logging.debug("spider name: %s", spider.name)
-        collectionName = "scrapy_detail"
+        collectionName = StaticConfig().archContents
         logging.debug("spider name: %s -- %s", spider.name, collectionName)
         # 查询条件
         query = {"originImgs.origin": item['origin']}

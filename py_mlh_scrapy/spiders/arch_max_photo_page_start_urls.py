@@ -5,6 +5,9 @@ from scrapy_redis.spiders import RedisSpider
 
 
 # 把下载图片的页面放入redis start_urls中
+from py_mlh_scrapy.helper.static_config import StaticConfig
+
+
 class scrapy_max_picture_page_start_urls_spider(RedisSpider):
     name = "scrapy_max_picture_page_start_urls_spider"
 
@@ -20,7 +23,7 @@ class scrapy_max_picture_page_start_urls_spider(RedisSpider):
     def start_requests(self):
         mongoclient = MongoSupport()
 
-        collection = mongoclient.db["scrapy_detail"]
+        collection = mongoclient.db[StaticConfig().archContents]
         # 统计pipeline
         countPipeline = [
             {"$unwind": "$originImgs"},
@@ -31,7 +34,7 @@ class scrapy_max_picture_page_start_urls_spider(RedisSpider):
         # 统计条数
         countResult = collection.aggregate(countPipeline)
 
-        baseUrl = "http://www.archdaily.cn"
+        baseUrl = StaticConfig().archContents
         # set redis
         # llen = self.server.llen
         # redisCount = llen(self.redis_key)

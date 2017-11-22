@@ -1,6 +1,7 @@
 import scrapy
 
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
+from py_mlh_scrapy.helper.static_config import StaticConfig
 from py_mlh_scrapy.items import ImageItem
 
 from urllib.parse import urlparse
@@ -26,7 +27,7 @@ class scrapy_max_photo(scrapy.Spider):
     def start_requests(self):
         mongoclient = MongoSupport()
 
-        collection = mongoclient.db["scrapy_detail"]
+        collection = mongoclient.db[StaticConfig().archContents]
         # 统计pipeline
         countPipeline = [
             {"$unwind": "$originImgs"},
@@ -37,7 +38,7 @@ class scrapy_max_photo(scrapy.Spider):
         # 统计条数
         countResult = collection.aggregate(countPipeline)
 
-        baseUrl = "http://www.archdaily.cn"
+        baseUrl = StaticConfig().arch
         for cresult in countResult:
             count = cresult['count']
             skip = 0;

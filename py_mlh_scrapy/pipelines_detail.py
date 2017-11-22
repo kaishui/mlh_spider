@@ -8,6 +8,7 @@
 import logging
 
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
+from py_mlh_scrapy.helper.static_config import StaticConfig
 
 
 class PipelineDetail(object):
@@ -30,7 +31,7 @@ class PipelineDetail(object):
     # save 详情页面元素
     def process_item(self, item, spider):
         # 方法名是collection name
-        collectionName = spider.__class__.__name__
+        collectionName =StaticConfig().archContents
         logging.debug("spider name: %s -- %s", spider.name, collectionName)
         detail = dict(item)
         detail["_id"] = self.mongoclient.get_mongo_id()

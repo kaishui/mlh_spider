@@ -19,7 +19,7 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         ua = random.choice(self.user_agent_list)
         if ua:
             # 记录
-            logging.debug('Current UserAgent: ', ua)
+            logging.debug('Current UserAgent: %s', ua)
             request.headers.setdefault('User-Agent', ua)
             # the default user_agent_list composes chrome,I E,firefox,Mozilla,opera,netscape
 
@@ -48,5 +48,7 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
         "Baiduspider+(+http://www.baidu.com/search/spider_jp.html)",
         "Baiduspider+(+http://www.baidu.com/search/spider.htm)",
-        "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)"
+        "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)",
+        "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
+        "Mozilla/5.0 (compatible; bingbot/2.0 +http://www.bing.com/bingbot.htm)"
     ]

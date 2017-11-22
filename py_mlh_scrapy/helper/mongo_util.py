@@ -19,17 +19,17 @@ class MongoSupport(object):
         if self.db is None:
             if mongo_url is None:
                 # dev env
-                # mongo_url = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_dev?authMechanism=SCRAM-SHA-1"
-                mongo_url = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_test?authMechanism=SCRAM-SHA-1"
+                mongo_url = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_dev?authMechanism=SCRAM-SHA-1"
+                # mongo_url = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_test?authMechanism=SCRAM-SHA-1"
             if mongo_dbname is None:
-                # mongo_dbname = "mlh_dev"
-                mongo_dbname = "mlh_test"
+                mongo_dbname = "mlh_dev"
+                # mongo_dbname = "mlh_test"
 
             self.client = MongoClient(mongo_url)
 
             self.db = self.client[mongo_dbname]
 
-            logging.info("建立mongo连接:url,dbname", mongo_url, mongo_dbname)
+            logging.info("建立mongo连接:%s ,%s", mongo_url, mongo_dbname)
 
     def get_mongo_id(self):
         return str(ObjectId())
