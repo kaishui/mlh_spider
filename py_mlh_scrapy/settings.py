@@ -158,7 +158,7 @@ ITEM_PIPELINES = {
 
 # Specify the full Redis URL for connecting (optional).
 # If set, this takes precedence over the REDIS_HOST and REDIS_PORT settings.
-REDIS_URL = 'redis://:malianghang@114.55.4.141:6379/4'
+REDIS_URL = 'redis://:malianghang@114.55.4.141:6379/5'
 
 # Custom redis client parameters (i.e.: socket timeout, etc.)
 # REDIS_PARAMS  = {}

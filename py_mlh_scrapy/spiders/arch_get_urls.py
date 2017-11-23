@@ -30,11 +30,12 @@ class scrapy_urls(scrapy.Spider):
         }
     }
 
-    def __init__(self, name=None, **kwargs):
+    def __init__(self, page="0", duplicate=False, name=None, **kwargs):
         super(scrapy_urls, self).__init__(name, **kwargs)
         self.baseUrl = "https://www.archdaily.cn/cn/search/projects?page="
-        self.page = 0
+        self.page = int(page)
         self.maxPage = 0
+        self.duplicate = duplicate
         self.mongoclient = MongoSupport()
 
     def start_requests(self):
@@ -60,22 +61,22 @@ class scrapy_urls(scrapy.Spider):
 
         existUriCount = self.mongoclient.db[StaticConfig().archContentUrls].find({"uri": {"$in": item["url"]}}).count()
         yield item
-        if self.page <= self.maxPage and existUriCount == 0:
+        if ( self.page <= self.maxPage and existUriCount == 0) or self.duplicate:
             self.page += 1
             yield scrapy.Request(self.baseUrl + str(self.page), dont_filter=True,
                                  callback=self.parse_page)
         else:
-            logging.debug("%s 有重复数据", response.url)
+            logging.debug("%s 有重复数据: %d", response.url, existUriCount)
 
 
-if __name__ == '__main__':
-    process = CrawlerProcess(get_project_settings())
-    # # # 加入爬虫
-    # process.crawl(scrapy_urls)
-    process.crawl(scrapy_detail)
-    # # process.crawl(scrapy_max_photo)
-    # # process.crawl(scrapy_max_demo)
-    # process.crawl(scrapy_max_picture_page_spider)
-    # process.crawl(scrapy_max_picture_page)
-    # # process.crawl(scrapy_max_picture_page_start_urls_spider)
-    process.start()
+# if __name__ == '__main__':
+#     process = CrawlerProcess(get_project_settings())
+#     # # # 加入爬虫
+#     process.crawl(scrapy_urls, page="6", duplicate=True)
+#     # process.crawl(scrapy_detail)
+#     # # process.crawl(scrapy_max_photo)
+#     # # process.crawl(scrapy_max_demo)
+#     # process.crawl(scrapy_max_picture_page_spider)
+#     # process.crawl(scrapy_max_picture_page)
+#     # # process.crawl(scrapy_max_picture_page_start_urls_spider)
+#     process.start()

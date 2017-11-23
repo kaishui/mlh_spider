@@ -1,0 +1,17 @@
+version: "3"
+services:
+  scrapyd:
+    image: registry.cn-hangzhou.aliyuncs.com/malianghang/scrapyd-python3.6:latest
+    ports:
+      - "6800:6800"
+    volumes:
+      - /tmp:/scrapyd
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - webnet
+
+networks:
+  webnet:
