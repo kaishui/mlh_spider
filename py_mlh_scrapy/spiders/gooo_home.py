@@ -44,7 +44,7 @@ class scrapy_gooood(scrapy.Spider):
                   "op":"ACT","type":"project","sourceWebsite":"gooood","createTime":getCurTime(),
                   "site":"谷德设计网","_id":mongoclient.get_mongo_id()}
 
-            #self.insertIfNotExist(data)
+            self.insertIfNotExist(data)
             datas.append(data)
 
 
