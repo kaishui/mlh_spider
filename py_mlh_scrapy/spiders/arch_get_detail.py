@@ -18,7 +18,8 @@ class scrapy_detail(scrapy.Spider):
     custom_settings = {
         "ITEM_PIPELINES": {
             'scrapy_redis.pipelines.RedisPipeline': 298,
-            'py_mlh_scrapy.pipelines_detail.PipelineDetail': 299
+            'py_mlh_scrapy.pipelines_detail.PipelineDetail': 299,
+            'py_mlh_scrapy.pipelines_detail_convert_to_news.ConvertToNews': 300
         }
     }
 

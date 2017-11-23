@@ -11,3 +11,6 @@ class StaticConfig:
 
     # 保存archdaily内容的表名
     archContents = "scrapy_archdaily_contents"
+
+    #news
+    news = "b_news"
