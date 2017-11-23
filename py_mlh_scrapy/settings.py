@@ -9,7 +9,7 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'py_mlh_scrapy'
+BOT_NAME = 'py_mlh_scrapy1'
 
 SPIDER_MODULES = ['py_mlh_scrapy.spiders']
 NEWSPIDER_MODULE = 'py_mlh_scrapy.spiders'
@@ -112,10 +112,10 @@ IMAGES_STORE = '/opt/spider/scrapy_download_photo'
 
 # redis
 # Enables scheduling storing requests queue in redis.
-SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+#SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 
 # Ensure all spiders share same duplicates filter through redis.
-DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+#DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
 # Default requests serializer is pickle, but it can be changed to any module
 # with loads and dumps functions. Note that pickle is not compatible between
