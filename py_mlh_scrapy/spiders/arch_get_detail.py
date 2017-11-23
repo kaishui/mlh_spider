@@ -10,8 +10,6 @@ from py_mlh_scrapy.items import DetailItem, Demension, ImageItem
     class name represent the collection name in mongodb
     author:kaishui
 """
-
-
 class scrapy_detail(scrapy.Spider):
     name = "scrapy_detail"
 
@@ -27,11 +25,22 @@ class scrapy_detail(scrapy.Spider):
     def start_requests(self):
         mongoclient = MongoSupport()
         collection = mongoclient.db[StaticConfig().archContentUrls]
-        urls = collection.find({}, projection={"uri": 1, "_id": 0})
-        baseUrl = StaticConfig().arch
-        for uri in urls:
-            logging.debug("uri : %s", uri["uri"])
-            yield scrapy.Request(url=baseUrl +  uri["uri"], callback=self.parse_detail)
+        # GET SUM NUMBER
+        count = collection.count({"op": "ACT"})
+        skip = 0
+        limit = 100
+        while (skip < count):
+            urls = collection.find({"op": "ACT"}, projection={"uri": 1, "_id": 1}).skip(skip).limit(limit)
+            baseUrl = StaticConfig().arch
+            ids = []
+            for uri in urls:
+                logging.debug("uri : %s", uri["uri"])
+                #extract ids
+                ids.append(uri["_id"])
+                yield scrapy.Request(url=baseUrl + uri["uri"], callback=self.parse_detail)
+            # update items have scraped
+            collection.update_many({"_id": {"$in": ids}}, {"$set": {"op": "SCRAPY"}}, upsert=True)
+            skip += limit
 
     # 详情页面
     def parse_detail(self, response):
@@ -71,7 +80,6 @@ class scrapy_detail(scrapy.Spider):
                 cts.append(content.strip())
         detail['content'] = cts
 
-
     # 获取图片
     def getImgs(self, detail, response):
         imgsLis = response.xpath('//ul[@id="gallery-thumbs"]/li')
@@ -95,7 +103,7 @@ class scrapy_detail(scrapy.Spider):
             latitude = locations.xpath('./a/@data-latitude').extract_first()
             # 经度
             longitude = locations.xpath('./a/@data-longitude').extract_first()
-            if latitude and longitude :
+            if latitude and longitude:
                 address = dict({"latitude": latitude, "longitude": longitude})
                 # 位置
                 detail['location'] = address

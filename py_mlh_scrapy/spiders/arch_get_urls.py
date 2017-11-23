@@ -30,7 +30,8 @@ class scrapy_urls(scrapy.Spider):
         }
     }
 
-    def __init__(self):
+    def __init__(self, name=None, **kwargs):
+        super(scrapy_urls, self).__init__(name, **kwargs)
         self.baseUrl = "https://www.archdaily.cn/cn/search/projects?page="
         self.page = 0
         self.maxPage = 0
