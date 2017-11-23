@@ -68,14 +68,14 @@ class scrapy_urls(scrapy.Spider):
             logging.debug("%s 有重复数据", response.url)
 
 
-# if __name__ == '__main__':
-#     process = CrawlerProcess(get_project_settings())
-#     # # # 加入爬虫
-#     # process.crawl(scrapy_urls)
-#     process.crawl(scrapy_detail)
-#     # # process.crawl(scrapy_max_photo)
-#     # # process.crawl(scrapy_max_demo)
-#     # process.crawl(scrapy_max_picture_page_spider)
-#     # process.crawl(scrapy_max_picture_page)
-#     # # process.crawl(scrapy_max_picture_page_start_urls_spider)
-#     process.start()
+if __name__ == '__main__':
+    process = CrawlerProcess(get_project_settings())
+    # # # 加入爬虫
+    # process.crawl(scrapy_urls)
+    process.crawl(scrapy_detail)
+    # # process.crawl(scrapy_max_photo)
+    # # process.crawl(scrapy_max_demo)
+    # process.crawl(scrapy_max_picture_page_spider)
+    # process.crawl(scrapy_max_picture_page)
+    # # process.crawl(scrapy_max_picture_page_start_urls_spider)
+    process.start()

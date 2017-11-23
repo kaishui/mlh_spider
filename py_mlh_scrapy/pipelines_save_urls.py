@@ -37,6 +37,9 @@ class UrlsPipeline(object):
         if item is not None:
             # 每一页的列表uri
             projectList = []
+            existUriCount = self.mongoclient.db[StaticConfig().archContentUrls].find(
+                {"uri": {"$in": item["url"]}}).count()
+
             for index in range(len(item["url"])):
                 url = item['url'][index]
                 title = item['title'][index]
@@ -44,5 +47,12 @@ class UrlsPipeline(object):
                 logging.debug("item uri: %s -- %s", url, title)
                 project = {"uri": url, "title": title, "site": item["site"], "op": "ACT", "_id": id}
                 projectList.append(project)
-            self.mongoclient.db[collectionName].insert_many(projectList)
+            if existUriCount == 0:
+                self.mongoclient.db[collectionName].insert_many(projectList)
+            else:
+                for project in projectList:
+                    try:
+                        self.mongoclient.db[collectionName].insert_one(project)
+                    except:
+                        logging.debug("重复数据duplicate uri: %s", project["uri"])
         return item

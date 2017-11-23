@@ -4,6 +4,7 @@ import pprint
 from bson.objectid import ObjectId
 from pymongo.mongo_client import MongoClient
 
+
 # mongo client
 class MongoSupport(object):
     '''
@@ -81,7 +82,23 @@ class MongoSupport(object):
 
 if __name__ == "__main__":
     mongoclient = MongoSupport()
-    project = mongoclient.db['T_USER'].find(dict({"_id": '57515612afd1197c49fd7f50'}))
+    arr = []
+    arr.append(dict({
+        "_id": "5a166aa55a465c3ca1db5151",
+        "uri": "/cn/884175/aesopyue-ke-gong-jue-yan-chang-dian-snohett2",
+        "title": "Aesop约克公爵广场店 / Snøhetta",
+        "site": "archdaily",
+        "op": "ACT"
+    }))
+
+    arr.append(dict({
+        "_id": "5a166aa55a465c3ca1db5152",
+        "uri": "/cn/884175/aesopyue-ke-gong-jue-yan-chang-dian-snohetta",
+        "title": "Aesop约克公爵广场店 / Snøhetta",
+        "site": "archdaily",
+        "op": "ACT"
+    }))
+    project = mongoclient.db['scrapy_archdaily_content_urls'].insert_many(arr)
     for value in project:
         print(value)
     pprint.pprint(project)
