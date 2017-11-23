@@ -2,6 +2,7 @@ import logging
 
 import scrapy
 
+from py_mlh_scrapy.helper.chineseDateUtil import ChineseDateUtil
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
 from py_mlh_scrapy.helper.static_config import StaticConfig
 from py_mlh_scrapy.items import DetailItem, Demension, ImageItem
@@ -68,7 +69,8 @@ class scrapy_detail(scrapy.Spider):
 
     # createTime
     def getTime(self, detail, response):
-        detail["createTime"] = response.xpath('//*[@id="single-meta"]/li[1]/text()').extract_first().strip()
+        createTime = response.xpath('//*[@id="single-meta"]/li[1]/text()').extract_first().strip()
+        detail["createTime"] = ChineseDateUtil.strToDate(createTime)
 
     # content
     def getDetail(self, detail, response):

@@ -1,4 +1,8 @@
-class ChineseNum:
+import re
+from datetime import datetime
+
+
+class ChineseDateUtil:
     CN_NUM = {
         u'〇': 0,
         u'一': 1,
@@ -100,9 +104,29 @@ class ChineseNum:
         ret += tmp
         return ret
 
-        # ldig.reverse()
-        # print ldig
-        # print CN_NUM[u'七']
+
+    """
+        string to date for archdaily
+        :param dateStr  formate: 11:00 - 2 十一月, 2017
+        :return milli_time
+    """
+    @staticmethod
+    def strToDate(dateStr):
+        m = re.compile(u"^(\d{1,2})\:(\d{1,2})[\s\-]+(\d{1,2})[\s]+([\u4e00-\u9fa5]{1,2})\月[\,\s]+(\d+)$")
+        urls = m.match(dateStr)
+        if urls:
+            arr = urls.groups()
+            date = ''
+            for i in range(len(arr)):
+                str = arr[i]
+                if i == 3:
+                    str = ChineseDateUtil().cn2dig(str).__str__()
+                date += str
+
+            time = datetime.strptime(date, "%H%M%d%m%Y")
+            return round(time.timestamp() * 1000).__str__()
+        else:
+            return 0
 
 
 if __name__ == '__main__':
@@ -120,6 +144,25 @@ if __name__ == '__main__':
                 u'一千一百一十一亿一千一百二十三万四千五百六十七',
                 u'一兆一千一百一十一亿一千一百二十三万四千五百六十七',
                 ]
+    #
+    # for cn in test_dig:
+    #     print(ChineseNum().cn2dig(cn))
 
-    for cn in test_dig:
-        print(ChineseNum().cn2dig(cn))
+    data = "11:00 - 2 十一月, 2017"
+    data1 = "15:00 - 31 十月, 2017"
+    # m = re.compile(u"^(\d{1,2})\:(\d{1,2})[\s\-]+(\d{1,2})[\s]+([\u4e00-\u9fa5]{1,2})\月[\,\s]+(\d+)$")
+    # urls = m.match(data1)
+    # if urls:
+    #     arr = urls.groups()
+    #     date = ''
+    #     for i in range(len(arr)):
+    #         str = arr[i]
+    #         if i == 3:
+    #             str = ChineseNum().cn2dig(str).__str__()
+    #         date += str
+    #     print(date)
+    #
+    #     time = datetime.strptime(date, "%H%M%d%m%Y")
+    #     print(round(time.timestamp() * 1000))
+
+    print(ChineseDateUtil.strToDate(data1))
