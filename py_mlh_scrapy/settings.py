@@ -9,7 +9,7 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'py_mlh_scrapy1'
+BOT_NAME = 'py_mlh_scrapy'
 
 SPIDER_MODULES = ['py_mlh_scrapy.spiders']
 NEWSPIDER_MODULE = 'py_mlh_scrapy.spiders'
