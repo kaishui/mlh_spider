@@ -40,8 +40,8 @@ class scrapy_gooood(scrapy.Spider):
             date = pro.css(".post-date::text").extract_first();
             url = pro.css(".entry-title a::attr('href')").extract_first();
             frontImage=pro.css(".post-thumbnail img::attr('src')").extract_first()
-            data={"title":title,"content":des,"date":"realTime","sourceUrl":url,"frontImage":frontImage,
-                  "op":"ACT","type":"project","sourceWebsite":"gooood","createTime":getCurTime(),
+            data={"title":title,"content":des,"sourceDate":date,"sourceUrl":url,"frontImage":frontImage,
+                  "op":"ACT","type":"project","sourceWebsite":"gooood","createTime":getCurTime(),"realTime":getCurTime(),
                   "site":"谷德设计网","_id":mongoclient.get_mongo_id()}
 
             self.insertIfNotExist(data)
