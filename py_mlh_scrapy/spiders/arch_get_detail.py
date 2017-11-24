@@ -32,13 +32,13 @@ class scrapy_detail(scrapy.Spider):
         skip = 0
         limit = 100
         while (skip < count):
-            urls = collection.find({"op": "ACT"}, projection={"uri": 1, "_id": 1}).skip(skip).limit(limit)
+            urls = collection.find({"op": "ACT","uri":{"$exists": 1}}, projection={"uri": 1, "_id": 1}).skip(skip).limit(limit)
             baseUrl = StaticConfig().arch
             ids = []
             for uri in urls:
-                logging.debug("uri : %s", uri["uri"])
                 #extract ids
                 ids.append(uri["_id"])
+                logging.debug("uri : %s", uri["uri"])
                 yield scrapy.Request(url=baseUrl + uri["uri"], callback=self.parse_detail)
             # update items have scraped
             collection.update_many({"_id": {"$in": ids}}, {"$set": {"op": "SCRAPY"}}, upsert=True)

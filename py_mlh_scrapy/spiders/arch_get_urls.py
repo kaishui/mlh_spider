@@ -61,7 +61,7 @@ class scrapy_urls(scrapy.Spider):
 
         existUriCount = self.mongoclient.db[StaticConfig().archContentUrls].find({"uri": {"$in": item["url"]}}).count()
         yield item
-        if ( self.page <= self.maxPage and existUriCount == 0) or self.duplicate:
+        if  self.page <= self.maxPage and (existUriCount == 0 or self.duplicate):
             self.page += 1
             yield scrapy.Request(self.baseUrl + str(self.page), dont_filter=True,
                                  callback=self.parse_page)
