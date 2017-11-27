@@ -42,6 +42,7 @@ class ConvertToNews(object):
         news["createTime"] = int(round(time.time() * 1000))
         news["realTime"] = int(detail["createTime"])
         news["sourceUrl"] = detail["url"]
+        news["author"] = detail["createUser"]
         news["title"] = detail["title"]
         news["site"] = "ArchDaily"
         news["sourceWebsite"] = "ArchDaily"

@@ -20,7 +20,6 @@ class DetailItem(scrapy.Item):
     # define the fields for your item here like:
     title = Field(serializer=str)           # 标题
     url = Field(serializer=str)             # 来源
-    content = Field(serializer=str)         # 内容
     tags = Field()                          # 标签
     createUser = Field(serializer=str)      # 作者
     createTime = Field(serializer=str)      # 创建时间

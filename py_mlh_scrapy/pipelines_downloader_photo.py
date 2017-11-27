@@ -30,7 +30,7 @@ class DownloaderPhotoPipeline(ImagesPipeline):
     # 图片文件夹路径
     # TODO: GET FROM SETTINGS
     def getPhotoPath(self):
-        return "/opt/spider/scrapy_download_photo/"
+        return "/softhware/workspace/mlh_spider/scrapy_download_photo/"
 
     def get_media_requests(self, item, info):
         yield scrapy.Request(item['target'])

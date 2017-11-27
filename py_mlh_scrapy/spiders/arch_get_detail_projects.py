@@ -1,18 +1,18 @@
 import logging
 
-import scrapy
+from scrapy_redis.spiders import RedisSpider
 
 from py_mlh_scrapy.helper.chineseDateUtil import ChineseDateUtil
-from py_mlh_scrapy.helper.mongo_util import MongoSupport
-from py_mlh_scrapy.helper.static_config import StaticConfig
 from py_mlh_scrapy.items import DetailItem, Demension, ImageItem
 
 """
-    class name represent the collection name in mongodb
+    archdaily project details
     author:kaishui
 """
-class scrapy_detail(scrapy.Spider):
-    name = "scrapy_detail"
+
+
+class arch_project_detail(RedisSpider):
+    name = "arch_project_detail"
 
     # 用户自定义setting 参考settings
     custom_settings = {
@@ -23,29 +23,12 @@ class scrapy_detail(scrapy.Spider):
         }
     }
 
-    # 从mongodb 获取需要爬取的url
     def start_requests(self):
-        mongoclient = MongoSupport()
-        collection = mongoclient.db[StaticConfig().archContentUrls]
-        # GET SUM NUMBER
-        count = collection.count({"op": "ACT"})
-        skip = 0
-        limit = 100
-        while (skip < count):
-            urls = collection.find({"op": "ACT","uri":{"$exists": 1}}, projection={"uri": 1, "_id": 1}).skip(skip).limit(limit)
-            baseUrl = StaticConfig().arch
-            ids = []
-            for uri in urls:
-                #extract ids
-                ids.append(uri["_id"])
-                logging.debug("uri : %s", uri["uri"])
-                yield scrapy.Request(url=baseUrl + uri["uri"], callback=self.parse_detail)
-            # update items have scraped
-            collection.update_many({"_id": {"$in": ids}}, {"$set": {"op": "SCRAPY"}}, upsert=True)
-            skip += limit
+        # 设置redis start urls 参考：scrapy_max_picture_page_start_urls_spider
+        return super().next_requests()
 
     # 详情页面
-    def parse_detail(self, response):
+    def parse(self, response):
         detail = DetailItem()
         # 来源
         detail['url'] = response.url

@@ -105,7 +105,7 @@ MONGODB_DATABASE = "mlh_dev"
 MONGODB_URI = "mongodb://mlhtest:malianghang123@114.55.4.141:27017/mlh_dev"
 
 # 图片保存在本地的地址
-IMAGES_STORE = '/opt/spider/scrapy_download_photo'
+IMAGES_STORE = '/softhware/workspace/mlh_spider/scrapy_download_photo'
 # IMAGES_STORE = '/backup/spider/images'
 
 
@@ -158,7 +158,7 @@ ITEM_PIPELINES = {
 
 # Specify the full Redis URL for connecting (optional).
 # If set, this takes precedence over the REDIS_HOST and REDIS_PORT settings.
-REDIS_URL = 'redis://:malianghang@114.55.4.141:6379/5'
+REDIS_URL = 'redis://:malianghang@114.55.4.141:6379/4'
 
 # Custom redis client parameters (i.e.: socket timeout, etc.)
 # REDIS_PARAMS  = {}
