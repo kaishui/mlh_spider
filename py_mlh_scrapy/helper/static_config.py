@@ -7,10 +7,10 @@ class StaticConfig:
     arch = "https://www.archdaily.cn"
 
     # 保存详情urls 的表名
-    archContentUrls = "scrapy_archdaily_content_urls"
+    archContentUrls = "scrapy_list_urls"
 
     # 保存archdaily内容的表名
-    archContents = "scrapy_archdaily_contents"
+    archContents = "scrapy_contents"
 
     #news
     news = "b_news"

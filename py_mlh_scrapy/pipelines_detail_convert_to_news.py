@@ -42,7 +42,9 @@ class ConvertToNews(object):
         news["createTime"] = int(round(time.time() * 1000))
         news["realTime"] = int(detail["createTime"])
         news["sourceUrl"] = detail["url"]
-        news["author"] = detail["createUser"]
+        if detail.get("createUser") is not None:
+            news["author"] = detail.get("createUser")
+
         news["title"] = detail["title"]
         news["site"] = "ArchDaily"
         news["sourceWebsite"] = "ArchDaily"
