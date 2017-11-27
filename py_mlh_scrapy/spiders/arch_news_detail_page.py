@@ -64,9 +64,9 @@ class arch_news_detail_page(RedisSpider):
         for imgLi in imgsLis:
             img = ImageItem()
             # 版权信息
-            img["copyright"] = imgLi.xpath('./@src').extract_first().strip()
+            img["copyright"] = imgLi.xpath('./@src').extract_first()
             # 图片uri
-            img["origin"] = imgLi.xpath('./@alt').extract_first().strip()
+            img["origin"] = imgLi.xpath('./@alt').extract_first()
             # 操作
             img["op"] = "act"
             imgs.append(dict(img))

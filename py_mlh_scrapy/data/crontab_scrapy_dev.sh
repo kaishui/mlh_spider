@@ -20,5 +20,5 @@ curl http://192.168.10.11:6800/schedule.json -d project=py_mlh_scrapy -d spider=
 curl http://192.168.10.11:6800/schedule.json -d project=py_mlh_scrapy -d spider=arch_news_detail_page
 
 # delete spider
-#curl http://192.168.10.11:6800/cancel.json -d project=py_mlh_scrapy -d job=5b38c9fcd03711e79fb902420aff0007
+#curl http://192.168.10.11:6800/cancel.json -d project=py_mlh_scrapy -d job=b3366ad4d35b11e7be8002420aff0005
 
