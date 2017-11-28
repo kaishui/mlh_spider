@@ -1,4 +1,6 @@
 #!/bin/bash
+
+#execute it each 2mins
 ##curl http://192.168.10.11:6800/delproject.json -d project=py_mlh_scrapy_test
 
 ##set archdaily project detail urls into redis
