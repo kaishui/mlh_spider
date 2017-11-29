@@ -2,7 +2,7 @@
 
 新手上路python
 
-##1.1 安装Python环境
+## 1.1 安装Python环境
 
 ```
 
@@ -18,7 +18,7 @@ https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tar.xz
 
 ```
 
-###1.1.2 解压
+### 1.1.2 解压
 
 ```
 
@@ -28,7 +28,7 @@ tar -xvf ./Python-3.6.1.tar
 
 ```
 
-###1.1.3 编译安装
+### 1.1.3 编译安装
 
 ```
 
@@ -44,7 +44,7 @@ ln -r /usr/local/bin/python3.5 /usr/bin/python
 
 ```
 
-###1.1.4 安装
+### 1.1.4 安装
 
 ```
 
@@ -52,12 +52,12 @@ apt install python3-pip
 
 ```
 
-###1.1.5 安装 virtualenv
+### 1.1.5 安装 virtualenv
 
 ```
  pip install virtualenv
 ```
-###1.1.6 创建激活相应python环境
+### 1.1.6 创建激活相应python环境
 
 ```
 virtualenv  -p /usr/bin/python3.6 ~/virtualenv/3.6
@@ -71,7 +71,7 @@ source active
 
 ```
 
-## requirements.txt
+##  1.1.7 requirements.txt
 
 使用插件：
 
