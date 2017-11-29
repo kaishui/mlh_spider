@@ -71,7 +71,7 @@ source active
 
 ```
 
-##  1.1.7 requirements.txt
+## 1.1.7 requirements.txt
 
 使用插件：
 
@@ -105,7 +105,7 @@ pipreqs ./
 
 ```
 
-##1.2 scrapy
+## 1.2 scrapy
 
 ```
 
@@ -113,7 +113,7 @@ pip install Scrapy==1.3.3
 
 ```
 
-##1.3 scrapyd
+## 1.3 scrapyd
 
 ```
 
@@ -168,7 +168,7 @@ pip install scrapyd-client
 
 
 
-##1.5 打包
+## 1.5 打包
 
 ```
 
@@ -184,7 +184,7 @@ scrapyd-deploy -p py_mlh_scrapy --egg=/software/workspace/python/py_mlh_scrapy/d
 
 ```
 
-##1.7启动一个spider
+## 1.7启动一个spider
 
 参考API：
 
@@ -200,7 +200,7 @@ curl http://localhost:6801/schedule.json -d project=py_mlh_scrapy -d spider=scra
 
 ```
 
-##1.8 取消一个spider
+## 1.8 取消一个spider
 
 ```
 
@@ -208,7 +208,7 @@ curl http://localhost:6801/cancel.json -d project=py_mlh_scrapy -d job=2f8bf77a2
 
 ```
 
-##1.9 其他API
+## 1.9 其他API
 
 ```
 
@@ -232,7 +232,7 @@ curl http://localhost:6800/delproject.json -d project=py_mlh_scrapy
 
 ```
 
-##2. sslv3 alert handshake failure
+## 2. sslv3 alert handshake failure
 
 ```
 
@@ -240,7 +240,7 @@ curl http://localhost:6800/delproject.json -d project=py_mlh_scrapy
 
 ```
 
-##3. scrapyd docker-compose.yml
+## 3. scrapyd docker-compose.yml
 ```
 version: "3"
 services:
