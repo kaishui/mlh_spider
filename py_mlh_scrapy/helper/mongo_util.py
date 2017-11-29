@@ -12,7 +12,12 @@ class MongoSupport(object):
     '''
     db = None
 
-    def __init__(self, mongo_url=None, mongo_dbname=None):
+    def __init__(self,crawler=None, mongo_url=None, mongo_dbname=None):
+
+        if crawler is not None:
+            mongo_url = crawler.settings.get("MONGODB_URI")
+            mongo_dbname = crawler.settings.get("MONGODB_DATABASE")
+
         '''
         :mongo_url 查询mongo数据库的连接字符串
         :mongo_dbname 要查询的数据库
@@ -31,6 +36,15 @@ class MongoSupport(object):
             self.db = self.client[mongo_dbname]
 
             logging.info("建立mongo连接:%s ,%s", mongo_url, mongo_dbname)
+
+    # mongodb settings
+    def set_mongo_client(self, crawler):
+        if crawler is not None:
+            mongo_url = crawler.settings.get("MONGODB_URI")
+            mongo_dbname = crawler.settings.get("MONGODB_DATABASE")
+            self.client = MongoClient(mongo_url)
+            self.db = self.client[mongo_dbname]
+
 
     def get_mongo_id(self):
         return str(ObjectId())

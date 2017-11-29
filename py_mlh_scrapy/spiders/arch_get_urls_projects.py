@@ -11,7 +11,7 @@ from py_mlh_scrapy.helper.static_config import StaticConfig
 from py_mlh_scrapy.items import ListItem
 
 
-class arch_projects_list(scrapy.Spider):
+class arch_projects_list(scrapy.Spider, MongoSupport):
     # 爬虫名称
     name = "arch_projects_list"
 
@@ -22,6 +22,12 @@ class arch_projects_list(scrapy.Spider):
             'py_mlh_scrapy.pipelines_save_urls.UrlsPipeline': 300
         }
     }
+
+    @classmethod
+    def from_crawler(self, crawler, *args, **kwargs):
+        obj = super(arch_projects_list, self).from_crawler(crawler, *args, **kwargs)
+        obj.set_mongo_client(crawler)
+        return obj
 
     def __init__(self, page="0", duplicate=False, name=None, **kwargs):
         super(arch_projects_list, self).__init__(name, **kwargs)
@@ -52,9 +58,9 @@ class arch_projects_list(scrapy.Spider):
 
         # 在数据库中查询，是否已经存在uri，如果存在循环结束
 
-        existUriCount = self.mongoclient.db[StaticConfig().archContentUrls].find({"uri": {"$in": item["url"]}}).count()
+        existUriCount = self.db[StaticConfig().archContentUrls].find({"uri": {"$in": item["url"]}}).count()
         yield item
-        if  self.page <= self.maxPage and (existUriCount == 0 or self.duplicate):
+        if self.page <= self.maxPage and (existUriCount == 0 or self.duplicate):
             self.page += 1
             yield scrapy.Request(self.baseUrl + str(self.page), dont_filter=True,
                                  callback=self.parse_page)

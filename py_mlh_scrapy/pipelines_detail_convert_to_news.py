@@ -20,7 +20,7 @@ class ConvertToNews(object):
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            mongoclient= MongoSupport()
+            mongoclient= MongoSupport(crawler)
         )
 
     def open_spider(self, spider):

@@ -34,8 +34,7 @@ class arch_project_detail(RedisSpider):
         detail['url'] = response.url
         # 标题
         detail["title"] = response.xpath(
-            "//h1[@class='afd-title-big afd-title-big--bmargin-small afd-relativeposition']/text()") \
-            .extract_first().strip()
+            "//h1[@class='afd-title-big afd-title-big--bmargin-small afd-relativeposition']/text()").extract_first().strip()
         # 发布时间
         self.getTime(detail, response)
         # 获取维度

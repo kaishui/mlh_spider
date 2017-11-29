@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 """
 
 # 图片下载
-class scrapy_max_photo(scrapy.Spider):
+class scrapy_max_photo(scrapy.Spider, MongoSupport):
     name = "arch_max_photo_spider"
 
     # 用户自定义setting 参考settings
@@ -23,11 +23,16 @@ class scrapy_max_photo(scrapy.Spider):
         }
     }
 
+    @classmethod
+    def from_crawler(self, crawler, *args, **kwargs):
+        obj = super(scrapy_max_photo, self).from_crawler(crawler, *args, **kwargs)
+        obj.set_mongo_client(crawler)
+        return obj
+
     # 从mongodb 获取需要爬取的url
     def start_requests(self):
-        mongoclient = MongoSupport()
 
-        collection = mongoclient.db[StaticConfig().archContents]
+        collection = self.db[StaticConfig().archContents]
         # 统计pipeline
         countPipeline = [
             {"$unwind": "$originImgs"},

@@ -8,7 +8,7 @@ from scrapy_redis.spiders import RedisSpider
 from py_mlh_scrapy.helper.static_config import StaticConfig
 
 
-class scrapy_max_picture_page_start_urls_spider(RedisSpider):
+class scrapy_max_picture_page_start_urls_spider(RedisSpider, MongoSupport):
     name = "scrapy_max_picture_page_start_urls_spider"
 
     custom_settings = {
@@ -18,12 +18,16 @@ class scrapy_max_picture_page_start_urls_spider(RedisSpider):
     }
 
     # 用户自定义setting 参考settings
+    @classmethod
+    def from_crawler(self, crawler, *args, **kwargs):
+        obj = super(scrapy_max_picture_page_start_urls_spider, self).from_crawler(crawler, *args, **kwargs)
+        obj.set_mongo_client(crawler)
+        return obj
 
     # 从mongodb 获取需要爬取的url
     def start_requests(self):
-        mongoclient = MongoSupport()
 
-        collection = mongoclient.db[StaticConfig().archContents]
+        collection = self.db[StaticConfig().archContents]
         # 统计pipeline
         countPipeline = [
             {"$unwind": "$originImgs"},

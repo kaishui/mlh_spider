@@ -3,12 +3,13 @@ import logging
 from scrapy_redis.spiders import RedisSpider
 
 from py_mlh_scrapy.helper.mongo_util import MongoSupport
-# 把下载图片的页面放入redis start_urls中
+# 把urls放入redis start_urls中
 from py_mlh_scrapy.helper.static_config import StaticConfig
 
 
-class scrapy_news_detail_start_urls_spider(RedisSpider):
+class scrapy_news_detail_start_urls_spider(RedisSpider, MongoSupport):
     name = "scrapy_news_detail_start_urls_spider"
+    mongoclient = None
 
     custom_settings = {
         "ITEM_PIPELINES": {
@@ -16,15 +17,22 @@ class scrapy_news_detail_start_urls_spider(RedisSpider):
         }
     }
 
-    def __init__(self, site=None, detail_spider=None, name=None, **kwargs):
-        super(scrapy_news_detail_start_urls_spider, self).__init__(name, **kwargs)
-        self.mongoclient = MongoSupport()
-        self.site = site
-        self.detail_spider = detail_spider
+    def __init__(self, **kwargs):
+        super(scrapy_news_detail_start_urls_spider, self).__init__(name=self.name, **kwargs)
+
+        self.site = kwargs.get("site")
+        self.detail_spider = kwargs.get("detail_spider")
+
+    @classmethod
+    def from_crawler(self,crawler, *args, **kwargs):
+        obj = super(scrapy_news_detail_start_urls_spider, self).from_crawler(crawler, *args, **kwargs)
+        obj.set_mongo_client(crawler)
+        return obj
+
 
     # 从mongodb 获取需要爬取的url
     def start_requests(self):
-        collection = self.mongoclient.db[StaticConfig().archContentUrls]
+        collection = self.db[StaticConfig().archContentUrls]
         # GET SUM NUMBER
         count = collection.count({"op": "ACT", "uri": {"$exists": 1}, "site": self.site})
         skip = 0

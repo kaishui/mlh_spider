@@ -20,7 +20,7 @@ from py_mlh_scrapy.spiders.arch_for_demo import scrapy_max_picture_page
 from py_mlh_scrapy.spiders.arch_news_detail_page_start_urls import scrapy_news_detail_start_urls_spider
 
 
-class arch_news_list(scrapy.Spider):
+class arch_news_list(scrapy.Spider, MongoSupport):
     # 爬虫名称
     name = "arch_news_list"
 
@@ -32,13 +32,18 @@ class arch_news_list(scrapy.Spider):
         }
     }
 
+    @classmethod
+    def from_crawler(self, crawler, *args, **kwargs):
+        obj = super(arch_news_list, self).from_crawler(crawler, *args, **kwargs)
+        obj.set_mongo_client(crawler)
+        return obj
+
     def __init__(self, page="0", duplicate=False, name=None, **kwargs):
         super(arch_news_list, self).__init__(name, **kwargs)
         self.baseUrl = "https://www.archdaily.cn/cn/xin-wen/page/"
         self.page = int(page)
         self.maxPage = 0
         self.duplicate = duplicate
-        self.mongoclient = MongoSupport()
 
     def start_requests(self):
         self.page += 1
@@ -52,8 +57,7 @@ class arch_news_list(scrapy.Spider):
 
         item = ListItem()
         # uri
-        item['url'] = response.xpath(
-            ' //div[@id="main"]/div[1]/div/h3/a/@href').extract()
+        item['url'] = response.xpath('//div[@id="main"]/div[1]/div/h3/a/@href').extract()
         # 标题
         item['title'] = response.xpath(' //div[@id="main"]/div[1]/div/h3/a/span/text()').extract()
         item['site'] = "archdaily_news"
@@ -61,7 +65,7 @@ class arch_news_list(scrapy.Spider):
 
         # 在数据库中查询，是否已经存在uri，如果存在循环结束
 
-        existUriCount = self.mongoclient.db[StaticConfig().archContentUrls].find({"uri": {"$in": item["url"]}}).count()
+        existUriCount = self.db[StaticConfig().archContentUrls].find({"uri": {"$in": item["url"]}}).count()
         yield item
         if  self.page <= self.maxPage and (existUriCount == 0 or self.duplicate):
             self.page += 1
@@ -74,14 +78,14 @@ class arch_news_list(scrapy.Spider):
 # if __name__ == '__main__':
 #     process = CrawlerProcess(get_project_settings())
 #     # # # 加入爬虫
-#     # process.crawl(arch_news_list, duplicate=True)
+#     process.crawl(arch_news_list, duplicate=True)
 #     # process.crawl(scrapy_news_detail_start_urls_spider, site="archdaily_news", detail_spider="arch_news_detail_page")
 #     # process.crawl(scrapy_news_detail_start_urls_spider, site="archdaily", detail_spider="arch_project_detail")
 #     # process.crawl(arch_news_detail_page)
-#     process.crawl(arch_project_detail)
+#     # process.crawl(arch_project_detail)
 #     # # process.crawl(scrapy_max_photo)
 #     # # process.crawl(scrapy_max_demo)
 #     # process.crawl(scrapy_max_picture_page_spider)
 #     # process.crawl(scrapy_max_picture_page)
-#     # # process.crawl(scrapy_max_picture_page_start_urls_spider)
+#     process.crawl(scrapy_max_picture_page_start_urls_spider)
 #     process.start()

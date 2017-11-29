@@ -18,9 +18,8 @@ class PipelineDetail(object):
 
     @classmethod
     def from_crawler(cls, crawler):
-        return cls(
-            mongoclient= MongoSupport()
-        )
+        mongoclient = MongoSupport(crawler)
+        return cls(mongoclient)
 
     def open_spider(self, spider):
         logging.debug("open_spider....")
